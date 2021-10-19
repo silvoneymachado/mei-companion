@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { NextPage } from "next";
 
 export {}
 declare global {
@@ -10,4 +11,8 @@ declare global {
        prisma: PrismaClient;
     } 
   }
+}
+
+export type NextApplicationPage<P = any, IP = P> = NextPage<P, IP> & {
+  auth?: boolean
 }

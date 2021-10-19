@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { styled } from "@mui/material";
+import { signOut, useSession } from "next-auth/client";
 
 const drawerWidth = 240;
 
@@ -35,6 +36,8 @@ const AppBar = styled(MuiAppBar, {
 
 const ButtonAppBar = (props: AppBarProps) => {
   const { open, toggleDrawer } = props;
+  const [session] = useSession();
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed" open={open} toggleDrawer={toggleDrawer}>
@@ -54,7 +57,10 @@ const ButtonAppBar = (props: AppBarProps) => {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             MEI Companion
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Typography variant="body2" component="p">
+            {session.user.name}
+          </Typography>
+          <Button color="inherit" onClick={() => signOut()}>Logout</Button>
         </Toolbar>
       </AppBar>
     </Box>

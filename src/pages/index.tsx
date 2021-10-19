@@ -1,6 +1,10 @@
 import React from "react";
 import { GetStaticProps } from "next";
+import Link from "next/link";
 import Layout from "../components/layout";
+import { useSession } from "next-auth/client";
+import AuthRenderer from "../components/authRenderer";
+import SignIn from "../signIn";
 
 export const getStaticProps: GetStaticProps = async () => {
   const feed = [
@@ -23,12 +27,35 @@ type Props = {
   // feed: PostProps[]
 };
 
-const Blog: React.FC<Props> = (props) => {
-  return (
+const IndexPage: React.FC<Props> = (props) => {
+  const renderLayout = () => (
     <Layout>
-      <h1>Coming soon...</h1>
+      <ul>
+        <li>
+          <Link href="/">
+            <a>Home</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/signIn">
+            <a>SignIn</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/dashboard">
+            <a>Dashboard</a>
+          </Link>
+        </li>
+      </ul>
     </Layout>
+  );
+
+  return (
+    <AuthRenderer
+      protectedComponent={renderLayout()}
+      fallBackComponent={<SignIn />}
+    />
   );
 };
 
-export default Blog;
+export default IndexPage;
