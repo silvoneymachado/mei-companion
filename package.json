@@ -14,6 +14,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@emotion/react": "^11.5.0",
+    "@emotion/styled": "^11.3.0",
     "@material-ui/core": "^4.12.3",
     "@prisma/client": "^3.2.1",
     "next": "9.5.5",
