@@ -18,7 +18,6 @@ return new Promise(async (resolve, reject) => {
     try {
       const res = await api.post<SigninResponseData>("/api/signin", data);
   
-      console.log(res.data);
       resolve({
         token: res.data.token,
         user: res.data.user,

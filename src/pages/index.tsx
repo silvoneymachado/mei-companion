@@ -4,7 +4,7 @@ import Layout from "../components/layout";
 import AuthRenderer from "../components/authRenderer";
 import SignIn from "./signin";
 import SignUp from "./signup";
-import { Button } from "@mui/material";
+import { Button, Container, Divider, Grid } from "@mui/material";
 import AlertComponent from "../components/alert";
 import { useAuth } from "../contexts/authContext";
 import { useRouter } from "next/router";
@@ -37,22 +37,33 @@ const IndexPage: React.FC<Props> = (props) => {
 
   const renderSignInOut = () => (
     <>
-      <Button variant="outlined" onClick={() => setIsSignin(!isSignin)}>
-        {isSignin ? "Nova Conta" : "Login"}
-      </Button>
       {isSignin ? (
         <SignIn />
       ) : (
         <SignUp changeIsLogin={() => setIsSignin(!isSignin)} />
       )}
+      <Container maxWidth="sm">
+        <Grid container direction="column" spacing={2}>
+          <Grid item>
+            <Divider variant="fullWidth" style={{ marginTop: 20, marginBottom: 20 }} />
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => setIsSignin(!isSignin)}
+            >
+              {isSignin ? "Nova Conta" : "Login"}
+            </Button>
+          </Grid>
+        </Grid>
+      </Container>
     </>
   );
-  
+
   useEffect(() => {
-    if(user) {
-      router.replace('/dashboard');
+    if (user) {
+      router.replace("/dashboard");
     }
-  }, [])
+  }, []);
 
   return (
     <Layout>

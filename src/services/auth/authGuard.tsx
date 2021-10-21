@@ -1,14 +1,21 @@
+import { Container, Typography } from "@mui/material";
 import { useRouter } from "next/dist/client/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import Layout from "../../components/layout";
 import { useAuth } from "../../contexts/authContext";
 
 const AuthGuard: React.FC = ({ children }) => {
   const { user, loading } = useAuth();
+  const [message, setMessage] = useState('Carregando...')
   const router = useRouter();
   const isUser = !!user;
 
   const signIn = () => {
-    router.replace("/");
+    setMessage('Você precisa realizar o login para acessar este recurso.');
+
+    setTimeout(() => {
+      router.replace("/");
+    }, 5000);
   };
   useEffect(() => {
     if (loading) return; // Do nothing while loading
@@ -21,7 +28,13 @@ const AuthGuard: React.FC = ({ children }) => {
 
   // Session is being fetched, or no user.
   // If no user, useEffect() will redirect.
-  return <div>Loading...</div>;
+  return (
+    <Layout>
+      <Container maxWidth="sm" style={{ marginTop: 30 }}>
+        <Typography variant="h5">{message}</Typography>
+      </Container>
+    </Layout>
+  );
 };
 
 export default AuthGuard;

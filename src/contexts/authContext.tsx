@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { setCookie, parseCookies, destroyCookie } from 'nookies'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import jwt from 'jsonwebtoken';
 
 import { signInRequest } from "../services/auth";
@@ -32,6 +32,7 @@ const  AuthProvider: React.FC = ({ children }) => {
   const { showAlert } = useAlert();
   const [user, setUser] = useState<User | null>(null)
   const [ loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const isAuthenticated = !!user;
 
@@ -57,14 +58,12 @@ const  AuthProvider: React.FC = ({ children }) => {
       setCookie(undefined, 'nextauth.token', token, {
         maxAge: 60 * 60 * 1, // 1 hour
       })
-
-      console.log(user);
   
       api.defaults.headers['Authorization'] = `Bearer ${token}`;
   
       setUser(user);
       
-      Router.push('/dashboard');
+      router.replace('/dashboard');
     } catch (error) {
       showAlert({ text: `${error.response.data.statusText}`, severity: Severity.ERROR });
     }
@@ -75,6 +74,7 @@ const  AuthProvider: React.FC = ({ children }) => {
     setLoading(true);
     destroyCookie(undefined, 'nextauth.token');
     setLoading(false);
+    router.replace('/singIn');
   }
 
   return (

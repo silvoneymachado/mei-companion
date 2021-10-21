@@ -13,7 +13,7 @@ const drawerWidth = 240;
 
 interface AppBarProps extends MuiAppBarProps {
   open: boolean;
-  toggledrawer: () => void;
+  toggledrawer?: () => void;
 }
 
 const AppBar = styled(MuiAppBar, {
@@ -36,22 +36,19 @@ const AppBar = styled(MuiAppBar, {
 
 const ButtonAppBar = (props: AppBarProps) => {
   const { open, toggledrawer } = props;
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
 
   const renderSessionControllers = () => (
     <>
-      <Typography variant="body1" component="div" style={{ borderRight: '0.1em solid white', padding: '0.5em', marginRight: 5 }}>
+      <Typography variant="body1" component="div">
         {`Bem vindo ${user.name}`}
       </Typography>
-      <Button color="inherit" variant="outlined" onClick={() => signOut()}>
-        Logout
-      </Button>
     </>
   );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed" open={open} toggledrawer={toggledrawer}>
+      <AppBar position="fixed" open={open}>
         <Toolbar>
           {!!user && (
             <IconButton

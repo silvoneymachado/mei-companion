@@ -6,6 +6,7 @@ import {
   Description,
   Category,
   Settings,
+  Logout,
 } from "@mui/icons-material";
 import {
   IconButton,
@@ -18,10 +19,12 @@ import {
   styled,
   Theme,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 
 import MuiDrawer from "@mui/material/Drawer";
 import { useRouter } from "next/router";
+import { useAuth } from "../contexts/authContext";
+import Dialog from "./dialog";
 
 interface DrawerProps {
   isDrawerOpen: boolean;
@@ -29,14 +32,16 @@ interface DrawerProps {
 }
 
 interface MenuItem {
-  label: string,
-  icon: JSX.Element,
-  route: string,
+  label: string;
+  icon: JSX.Element;
+  route: string;
 }
 
 const AppDrawer: React.FC<DrawerProps> = (props: DrawerProps) => {
   const { isDrawerOpen, toggledrawer } = props;
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
+  const { signOut } = useAuth();
 
   const menuItems: MenuItem[] = [
     {
@@ -68,7 +73,11 @@ const AppDrawer: React.FC<DrawerProps> = (props: DrawerProps) => {
 
   const navigate = (item: MenuItem) => {
     router.push(item.route);
-  }
+  };
+
+  const confirmSignOut = () => {
+    signOut();
+  };
 
   return (
     <Drawer variant="permanent" open={isDrawerOpen}>
@@ -85,8 +94,21 @@ const AppDrawer: React.FC<DrawerProps> = (props: DrawerProps) => {
             <ListItemText primary={item.label} />
           </ListItem>
         ))}
+        <ListItem button onClick={() => setIsModalOpen(true)}>
+          <ListItemIcon>
+            <Logout />
+          </ListItemIcon>
+          <ListItemText primary={"Sair"} />
+        </ListItem>
       </List>
       <Divider />
+      <Dialog
+        contentText="Deseja realmente sair da aplicação?"
+        title="Sair"
+        onConfirm={() => confirmSignOut()}
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+      />
     </Drawer>
   );
 };
