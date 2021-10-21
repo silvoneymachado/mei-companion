@@ -11,7 +11,7 @@ import {
   Theme,
   useTheme,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 
 import MuiDrawer from "@mui/material/Drawer";
 
@@ -66,19 +66,18 @@ const Drawer = styled(MuiDrawer, {
 
 interface DrawerProps {
     isDrawerOpen: boolean;
-    toggleDrawer: () => void;
+    toggledrawer: () => void;
 }
 
 const AppDrawer: React.FC<DrawerProps> = (props: DrawerProps) => {
-  const theme = useTheme();
-  const { isDrawerOpen, toggleDrawer } = props;
+  const { isDrawerOpen, toggledrawer } = props;
 
 
 
   return (
     <Drawer variant="permanent" open={isDrawerOpen}>
       <DrawerHeader>
-        <IconButton onClick={toggleDrawer}>
+        <IconButton onClick={toggledrawer}>
           {!isDrawerOpen ? <ChevronRight /> : <ChevronLeft />}
         </IconButton>
       </DrawerHeader>

@@ -1,14 +1,14 @@
-import { useSession } from "next-auth/client";
 import { useRouter } from "next/dist/client/router";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import { useAuth } from "../../contexts/authContext";
 
-const AuthGuard = ({ children }) => {
-  const [session, loading] = useSession();
+const AuthGuard: React.FC = ({ children }) => {
+  const { user, loading } = useAuth();
   const router = useRouter();
-  const isUser = !!session?.user;
+  const isUser = !!user;
 
   const signIn = () => {
-    router.replace("/signin")
+    router.replace("/");
   };
   useEffect(() => {
     if (loading) return; // Do nothing while loading
@@ -16,7 +16,7 @@ const AuthGuard = ({ children }) => {
   }, [isUser, loading]);
 
   if (isUser) {
-    return children;
+    return <>{children}</>;
   }
 
   // Session is being fetched, or no user.

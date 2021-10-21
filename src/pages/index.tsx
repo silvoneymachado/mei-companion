@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { GetStaticProps } from "next";
-import Link from "next/link";
 import Layout from "../components/layout";
-import { useSession } from "next-auth/client";
 import AuthRenderer from "../components/authRenderer";
-import SignIn from "../signIn";
+import SignIn from "./signin";
+import SignUp from "./signup";
+import { Button } from "@mui/material";
+import AlertComponent from "../components/alert";
+import { useAuth } from "../contexts/authContext";
+import { useRouter } from "next/router";
 
 export const getStaticProps: GetStaticProps = async () => {
   const feed = [
@@ -28,33 +31,37 @@ type Props = {
 };
 
 const IndexPage: React.FC<Props> = (props) => {
-  const renderLayout = () => (
-    <Layout>
-      <ul>
-        <li>
-          <Link href="/">
-            <a>Home</a>
-          </Link>
-        </li>
-        <li>
-          <Link href="/signIn">
-            <a>SignIn</a>
-          </Link>
-        </li>
-        <li>
-          <Link href="/dashboard">
-            <a>Dashboard</a>
-          </Link>
-        </li>
-      </ul>
-    </Layout>
+  const [isSignin, setIsSignin] = useState(true);
+  const { user } = useAuth();
+  const router = useRouter();
+
+  const renderSignInOut = () => (
+    <>
+      <Button variant="outlined" onClick={() => setIsSignin(!isSignin)}>
+        {isSignin ? "Nova Conta" : "Login"}
+      </Button>
+      {isSignin ? (
+        <SignIn />
+      ) : (
+        <SignUp changeIsLogin={() => setIsSignin(!isSignin)} />
+      )}
+    </>
   );
+  
+  useEffect(() => {
+    if(user) {
+      router.replace('/dashboard');
+    }
+  }, [])
 
   return (
-    <AuthRenderer
-      protectedComponent={renderLayout()}
-      fallBackComponent={<SignIn />}
-    />
+    <Layout>
+      <AlertComponent />
+      <AuthRenderer
+        protectedComponent={<></>}
+        fallBackComponent={renderSignInOut()}
+      />
+    </Layout>
   );
 };
 

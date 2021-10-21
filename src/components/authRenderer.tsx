@@ -1,5 +1,5 @@
-import { useSession } from "next-auth/client";
 import React, { ReactNode } from "react";
+import { useAuth } from "../contexts/authContext";
 
 interface Props {
   protectedComponent: ReactNode;
@@ -8,8 +8,8 @@ interface Props {
 
 const AuthRenderer: React.FC<Props> = (props: Props) => {
   const { protectedComponent, fallBackComponent } = props;
-  const [session] = useSession();
-  return <>{session ? protectedComponent : fallBackComponent}</>;
+  const { user } = useAuth();
+  return <>{user ? protectedComponent : fallBackComponent}</>;
 };
 
 export default AuthRenderer;

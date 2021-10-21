@@ -7,13 +7,13 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { styled } from "@mui/material";
-import { signOut, useSession } from "next-auth/client";
+import { useAuth } from "../contexts/authContext";
 
 const drawerWidth = 240;
 
 interface AppBarProps extends MuiAppBarProps {
   open: boolean;
-  toggleDrawer: () => void;
+  toggledrawer: () => void;
 }
 
 const AppBar = styled(MuiAppBar, {
@@ -35,32 +35,42 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 const ButtonAppBar = (props: AppBarProps) => {
-  const { open, toggleDrawer } = props;
-  const [session] = useSession();
+  const { open, toggledrawer } = props;
+  const { user, signOut } = useAuth();
+
+  const renderSessionControllers = () => (
+    <>
+      <Typography variant="body2" component="p">
+        {user.name}
+      </Typography>
+      <Button color="inherit" onClick={() => signOut()}>
+        Logout
+      </Button>
+    </>
+  );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed" open={open} toggleDrawer={toggleDrawer}>
+      <AppBar position="fixed" open={open} toggledrawer={toggledrawer}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={toggleDrawer}
-            edge="start"
-            sx={{
-              marginRight: '36px',
-              ...(open && { display: 'none' }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
+          {!!user && (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={toggledrawer}
+              edge="start"
+              sx={{
+                marginRight: "36px",
+                ...(open && { display: "none" }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             MEI Companion
           </Typography>
-          <Typography variant="body2" component="p">
-            {session.user.name}
-          </Typography>
-          <Button color="inherit" onClick={() => signOut()}>Logout</Button>
+          {!!user && renderSessionControllers()}
         </Toolbar>
       </AppBar>
     </Box>

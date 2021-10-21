@@ -1,5 +1,4 @@
 import { Box, styled } from "@mui/material";
-import { useSession } from "next-auth/client";
 import React, { useState } from "react";
 import AppDrawer from "./appDrawer";
 import AuthRenderer from "./authRenderer";
@@ -17,21 +16,21 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 const Layout: React.FC = ({ children }) => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
 
-  const toggleDrawer = () => {
+  const toggledrawer = () => {
     setDrawerIsOpen(!drawerIsOpen);
   };
 
   const renderScaffold = () => (
     <>
-      <ButtonAppBar toggleDrawer={toggleDrawer} open={drawerIsOpen} />
-      <AppDrawer isDrawerOpen={drawerIsOpen} toggleDrawer={toggleDrawer} />
+      <AppDrawer isDrawerOpen={drawerIsOpen} toggledrawer={toggledrawer} />
     </>
   );
-
+  
   return (
     <Box sx={{ display: "flex" }}>
       <AuthRenderer protectedComponent={renderScaffold()} />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <ButtonAppBar toggledrawer={toggledrawer} open={drawerIsOpen} />  
         <DrawerHeader />
         {children}
       </Box>
