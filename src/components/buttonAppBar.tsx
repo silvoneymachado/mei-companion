@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import { styled } from "@mui/material";
+import { Divider, styled } from "@mui/material";
 import { useAuth } from "../contexts/authContext";
 
 const drawerWidth = 240;
@@ -40,10 +40,10 @@ const ButtonAppBar = (props: AppBarProps) => {
 
   const renderSessionControllers = () => (
     <>
-      <Typography variant="body2" component="p">
-        {user.name}
+      <Typography variant="body1" component="div" style={{ borderRight: '0.1em solid white', padding: '0.5em', marginRight: 5 }}>
+        {`Bem vindo ${user.name}`}
       </Typography>
-      <Button color="inherit" onClick={() => signOut()}>
+      <Button color="inherit" variant="outlined" onClick={() => signOut()}>
         Logout
       </Button>
     </>

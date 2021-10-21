@@ -1,4 +1,12 @@
-import { ChevronLeft, ChevronRight, Inbox, Mail } from "@mui/icons-material";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Group,
+  Receipt,
+  Description,
+  Category,
+  Settings,
+} from "@mui/icons-material";
 import {
   IconButton,
   Divider,
@@ -9,11 +17,81 @@ import {
   CSSObject,
   styled,
   Theme,
-  useTheme,
 } from "@mui/material";
 import React from "react";
 
 import MuiDrawer from "@mui/material/Drawer";
+import { useRouter } from "next/router";
+
+interface DrawerProps {
+  isDrawerOpen: boolean;
+  toggledrawer: () => void;
+}
+
+interface MenuItem {
+  label: string,
+  icon: JSX.Element,
+  route: string,
+}
+
+const AppDrawer: React.FC<DrawerProps> = (props: DrawerProps) => {
+  const { isDrawerOpen, toggledrawer } = props;
+  const router = useRouter();
+
+  const menuItems: MenuItem[] = [
+    {
+      label: "Parceiros",
+      icon: <Group />,
+      route: "/partners",
+    },
+    {
+      label: "Lançamentos",
+      icon: <Receipt />,
+      route: "/invoices",
+    },
+    {
+      label: "Despesas",
+      icon: <Description />,
+      route: "/expenses",
+    },
+    {
+      label: "Categorias",
+      icon: <Category />,
+      route: "/categories",
+    },
+    {
+      label: "Configurações",
+      icon: <Settings />,
+      route: "/configs",
+    },
+  ];
+
+  const navigate = (item: MenuItem) => {
+    router.push(item.route);
+  }
+
+  return (
+    <Drawer variant="permanent" open={isDrawerOpen}>
+      <DrawerHeader>
+        <IconButton onClick={toggledrawer}>
+          {!isDrawerOpen ? <ChevronRight /> : <ChevronLeft />}
+        </IconButton>
+      </DrawerHeader>
+      <Divider />
+      <List>
+        {menuItems.map((item, index) => (
+          <ListItem button key={index} onClick={() => navigate(item)}>
+            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.label} />
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+    </Drawer>
+  );
+};
+
+export default AppDrawer;
 
 const drawerWidth = 240;
 
@@ -63,48 +141,3 @@ const Drawer = styled(MuiDrawer, {
     "& .MuiDrawer-paper": closedMixin(theme),
   }),
 }));
-
-interface DrawerProps {
-    isDrawerOpen: boolean;
-    toggledrawer: () => void;
-}
-
-const AppDrawer: React.FC<DrawerProps> = (props: DrawerProps) => {
-  const { isDrawerOpen, toggledrawer } = props;
-
-
-
-  return (
-    <Drawer variant="permanent" open={isDrawerOpen}>
-      <DrawerHeader>
-        <IconButton onClick={toggledrawer}>
-          {!isDrawerOpen ? <ChevronRight /> : <ChevronLeft />}
-        </IconButton>
-      </DrawerHeader>
-      <Divider />
-      <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <Inbox /> : <Mail />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <Inbox /> : <Mail />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-    </Drawer>
-  );
-};
-
-export default AppDrawer;

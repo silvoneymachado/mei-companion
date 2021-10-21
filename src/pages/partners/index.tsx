@@ -3,18 +3,16 @@ import React from "react";
 import Layout from "../../components/layout";
 import { NextApplicationPage } from "../../types/types";
 
-// import { Container } from './styles';
-
-const Dashboard: NextApplicationPage<React.FC> = () => {
+const Partners: NextApplicationPage<React.FC> = () => {
   return (
     <Layout>
       <Container maxWidth="lg">
-        <Typography variant="h2">DashBoard</Typography>
+        <Typography variant="h2">Partners</Typography>
       </Container>
     </Layout>
   );
 };
 
-Dashboard.auth = true;
+Partners.auth = true;
 
-export default Dashboard;
+export default Partners;
