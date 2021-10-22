@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AppProps } from "next/app";
 import React, { useEffect } from "react";
 import theme from "../theme";
@@ -16,7 +17,7 @@ const App = (props: AppProps) => {
   const {
     Component,
     pageProps: { ...pageProps },
-  }: { Component: NextApplicationPage; pageProps: any } = props;
+  }: { Component: any; pageProps: any } = props;
 
   useEffect(() => {
     // Remove the server-side injected CSS.
