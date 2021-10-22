@@ -64,7 +64,6 @@ export default async function handler(
 
   async function update(invoice: Invoice) {
     try {
-      console.info("update");
       const result = await prisma.invoice.update({
         where: { id: invoice.id },
         data: {

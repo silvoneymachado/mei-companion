@@ -17,13 +17,13 @@ type SigninResponseData = {
 export function signInRequest(
   data: SignInRequestData
 ): Promise<SigninResponseData> {
-  return new Promise(async(resolve, reject) => {
+  return new Promise((resolve, reject) => {
     try {
-      const res = await api.post<SigninResponseData>("/api/signin", data);
-
-      resolve({
-        token: res.data.token,
-        user: res.data.user,
+      api.post<SigninResponseData>("/api/signin", data).then((res) => {
+        resolve({
+          token: res.data.token,
+          user: res.data.user,
+        });
       });
     } catch (error) {
       reject(error);

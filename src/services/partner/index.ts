@@ -4,11 +4,11 @@ import { api } from "../api";
 const basePath = "/api/partner/";
 
 export function addPartner(data: Partner): Promise<Partner> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     try {
-      const res = await api.post<Partner>(basePath, data);
-
-      resolve(res.data);
+      api.post<Partner>(basePath, data).then((res) => {
+        resolve(res.data);
+      });
     } catch (error) {
       reject(error);
     }
@@ -16,51 +16,51 @@ export function addPartner(data: Partner): Promise<Partner> {
 }
 
 export function updatePartner(data: Partner): Promise<Partner> {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const res = await api.put<Partner>(basePath, data);
-  
+  return new Promise((resolve, reject) => {
+    try {
+      api.put<Partner>(basePath, data).then((res) => {
         resolve(res.data);
-      } catch (error) {
-        reject(error);
-      }
-    });
-  }
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
 
 export function getAllPartners(): Promise<Partner[]> {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const res = await api.get<Partner[]>(basePath);
-  
+  return new Promise((resolve, reject) => {
+    try {
+      api.get<Partner[]>(basePath).then((res) => {
         resolve(res.data);
-      } catch (error) {
-        reject(error);
-      }
-    });
-  }
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
 
 export function getPartnerById(id: number): Promise<Partner> {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const res = await api.get<Partner>(`${basePath}${id}`);
-  
+  return new Promise((resolve, reject) => {
+    try {
+      api.get<Partner>(`${basePath}${id}`).then((res) => {
         resolve(res.data);
-      } catch (error) {
-        reject(error);
-      }
-    });
-  }
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
 
 export function removePartner(id: number): Promise<boolean> {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     try {
-      const res = await api.delete(`${basePath}${id}`);
-
-      if (res.status) {
-        resolve(true);
-      } else {
-        reject();
-      }
+      api.delete(`${basePath}${id}`).then((res) => {
+        if (res.status) {
+          resolve(true);
+        } else {
+          reject();
+        }
+      });
     } catch (error) {
       reject(error);
     }

@@ -31,7 +31,7 @@ export default async function handler(
       });
       res.json(result);
     } catch (error) {
-        res.status(500).json({
+      res.status(500).json({
         ok: false,
         status: 500,
         statusText: "Erro ao processar no banco de dados",
@@ -41,13 +41,12 @@ export default async function handler(
 
   async function remove(id: number) {
     try {
-      console.info("remove");
       const result = await prisma.invoice.delete({
         where: { id: id },
       });
       res.json(result);
     } catch (error) {
-        res.status(500).json({
+      res.status(500).json({
         ok: false,
         status: 500,
         statusText: "Erro ao processar no banco de dados",
