@@ -43,12 +43,12 @@ export type User = {
     id?: number
     userId: number
     name: string
-    value: number
+    partnerId?: number
+    value: string
     notes?: string
     paymentDate: Date
     referenceDate: Date
-    createdAt: Date
-    updatedAt: Date
+    categoryId?: number
   }
   
   /**

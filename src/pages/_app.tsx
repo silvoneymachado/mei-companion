@@ -10,9 +10,7 @@ import AuthGuard from "../services/auth/authGuard";
 import { NextApplicationPage } from "../types/types";
 import { AlertProvider } from "../contexts/alertContext";
 import { AuthProvider } from "../contexts/authContext";
-import { PartnerProvider } from "../contexts/partnerContext";
-import { InvoiceProvider } from "../contexts/invoiceContext";
-import { CategoryProvider } from "../contexts/categoryContext";
+import RootProvider from "../contexts";
 
 const App = (props: AppProps) => {
   const {
@@ -35,13 +33,9 @@ const App = (props: AppProps) => {
         <AuthProvider>
           {Component.auth ? (
             <AuthGuard>
-              <PartnerProvider>
-                <InvoiceProvider>
-                  <CategoryProvider>
-                    <Component {...pageProps} />
-                  </CategoryProvider>
-                </InvoiceProvider>
-              </PartnerProvider>
+              <RootProvider>
+                <Component {...pageProps} />
+              </RootProvider>
             </AuthGuard>
           ) : (
             // public page

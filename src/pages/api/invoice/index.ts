@@ -27,7 +27,6 @@ export default async function handler(
     try {
       const result = await prisma.invoice.create({
         data: {
-          id: invoice.id,
           userId: invoice.userId,
           partnerId: invoice.partnerId,
           invoiceNumber: invoice.invoiceNumber,

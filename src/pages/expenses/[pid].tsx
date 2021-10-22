@@ -19,43 +19,48 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout";
 import { NextApplicationPage } from "../../types/types";
-import { Invoice } from "../../util/models";
+import { Category, Expense } from "../../util/models";
 import * as Yup from "yup";
 import { useAuth } from "../../contexts/authContext";
-import { useInvoice } from "../../contexts/invoiceContext";
+import { useExpense } from "../../contexts/expenseContext";
 import { usePartner } from "../../contexts/partnerContext";
 import { Partner } from ".prisma/client";
+import { useCategory } from "../../contexts/categoryContext";
 
 const Details: NextApplicationPage<React.FC> = () => {
   const router = useRouter();
   const { user } = useAuth();
   const { pid } = router.query;
-  const { getById, create, update, loadedInvoice } = useInvoice();
+  const { getById, create, update, loadedExpense } = useExpense();
   const { getAll: getAllPartners, partners } = usePartner();
+  const { getAll: getAllCategories, categories } = useCategory();
   const [selectedPartner, setSelectedPartner] = useState(null);
-  let formikRef: FormikProps<Invoice>;
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  let formikRef: FormikProps<Expense>;
 
   const getId = () =>
     isNaN(parseInt(String(pid)))
-      ? null
+      ? undefined
       : parseInt(String(pid)) === 0
-      ? null
+      ? undefined
       : parseInt(String(pid));
 
-  const formikInitialValues: Invoice = {
+  const formikInitialValues: Expense = {
     id: getId(),
     userId: user.id,
-    partnerId: null,
-    invoiceNumber: "",
-    value: '',
+    name: "",
+    partnerId: 0,
+    value: "",
+    notes: "",
     paymentDate: new Date(),
     referenceDate: new Date(),
-    notes: "",
+    categoryId: null,
   };
 
   useEffect(() => {
     const id = getId();
     getAllPartners();
+    getAllCategories();
     if (id) {
       getById(id);
     }
@@ -63,31 +68,44 @@ const Details: NextApplicationPage<React.FC> = () => {
 
   useEffect(() => {
     if (getId()) {
-      formikRef.setValues(loadedInvoice);
+      formikRef.setValues(loadedExpense);
+    }
+  }, [loadedExpense]);
+
+  useEffect(() => {
+    if(partners && partners?.length > 0){
       setSelectedPartner(
-        partners.find((partner) => partner.id === loadedInvoice.partnerId)
+        partners?.find((partner) => partner.id === loadedExpense.partnerId)
       );
     }
-  }, [loadedInvoice]);
+  }, [partners]);
+
+  useEffect(() => {
+    if(categories && categories?.length > 0){
+      setSelectedCategory(
+        categories?.find(
+          (category) => category.id === loadedExpense.categoryId
+        )
+      );
+    }
+  }, [categories]);
 
   const requiredMessage = "Obrigatório";
   const SignUpValidationSchema = Yup.object().shape({
-    partnerId: Yup.number().required(requiredMessage).nullable(),
+    categoryId: Yup.number().required(requiredMessage).nullable(),
     value: Yup.number()
       .typeError("Digite apenas números")
       .required(requiredMessage),
-    invoiceNumber: Yup.string()
-      .max(44, "O CNPJ deve conter 44 dígitos")
-      .required(requiredMessage),
     referenceDate: Yup.date().required(requiredMessage),
     notes: Yup.string().required(requiredMessage),
+    name: Yup.string().required(requiredMessage),
   });
 
   const handleCancel = () => {
     router.back();
   };
 
-  const handleSubmit = (values: Invoice) => {
+  const handleSubmit = (values: Expense) => {
     const data = {
       ...values,
       userId: user.id,
@@ -99,7 +117,12 @@ const Details: NextApplicationPage<React.FC> = () => {
     }
   };
 
-  const defaultProps = {
+  const categorySelectProps = {
+    options: categories?.filter((category) => category.active),
+    getOptionLabel: (category: Category) => category.name,
+  };
+
+  const partnerSelectProps = {
     options: partners,
     getOptionLabel: (partner: Partner) =>
       `${partner.corporateName} - [${partner.cnpj}]`,
@@ -108,6 +131,11 @@ const Details: NextApplicationPage<React.FC> = () => {
   const handleSelectPartner = (partner: Partner) => {
     setSelectedPartner(partner);
     formikRef.setFieldValue("partnerId", partner?.id);
+  };
+
+  const handleSelectCategory = (category: Category) => {
+    setSelectedCategory(category);
+    formikRef.setFieldValue("categoryId", category?.id);
   };
 
   return (
@@ -135,18 +163,18 @@ const Details: NextApplicationPage<React.FC> = () => {
                           as={Autocomplete}
                           fullWidth
                           clear
-                          onChange={(_e: any, newValue: Partner) =>
-                            handleSelectPartner(newValue)
+                          onChange={(_e: any, newValue: Category) =>
+                            handleSelectCategory(newValue)
                           }
-                          value={selectedPartner}
-                          {...defaultProps}
+                          value={selectedCategory}
+                          {...categorySelectProps}
                           renderInput={(
                             params: JSX.IntrinsicAttributes & TextFieldProps
-                          ) => <TextField {...params} label="Parceiro" />}
-                          error={errors.partnerId && touched.partnerId}
+                          ) => <TextField {...params} label="Categoria" />}
+                          error={errors.categoryId && touched.categoryId}
                           helperText={
-                            errors.partnerId && touched.partnerId
-                              ? errors.partnerId
+                            errors.categoryId && touched.categoryId
+                              ? errors.categoryId
                               : null
                           }
                         />
@@ -184,29 +212,6 @@ const Details: NextApplicationPage<React.FC> = () => {
                     </Grid>
                     <Grid
                       container
-                      direction="column"
-                      sx={{ marginTop: 2 }}
-                      spacing={2}
-                    >
-                      <Grid item>
-                        <Field
-                          as={TextField}
-                          fullWidth
-                          value={values.invoiceNumber}
-                          label="Chave de Acesso NF-e"
-                          name="invoiceNumber"
-                          inputProps={{ maxLength: 44, inputMode: "numeric" }}
-                          error={errors.invoiceNumber && touched.invoiceNumber}
-                          helperText={
-                            errors.invoiceNumber && touched.invoiceNumber
-                              ? errors.invoiceNumber
-                              : null
-                          }
-                        />
-                      </Grid>
-                    </Grid>
-                    <Grid
-                      container
                       direction="row"
                       sx={{ marginTop: 2 }}
                       spacing={2}
@@ -225,6 +230,42 @@ const Details: NextApplicationPage<React.FC> = () => {
                           }
                         />
                       </Grid>
+                      <Grid item sm>
+                        <Field
+                          as={TextField}
+                          fullWidth
+                          value={values.name}
+                          label="Nome"
+                          name="name"
+                          error={errors.name && touched.name}
+                          helperText={
+                            errors.name && touched.name ? errors.name : null
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs>
+                        <Field
+                          as={Autocomplete}
+                          fullWidth
+                          clear
+                          onChange={(_e: any, newValue: Partner) =>
+                            handleSelectPartner(newValue)
+                          }
+                          value={selectedPartner}
+                          {...partnerSelectProps}
+                          renderInput={(
+                            params: JSX.IntrinsicAttributes & TextFieldProps
+                          ) => <TextField {...params} label="Parceiro" />}
+                          error={errors.partnerId && touched.partnerId}
+                          helperText={
+                            errors.partnerId && touched.partnerId
+                              ? errors.partnerId
+                              : null
+                          }
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid container direction="row" sx={{ marginTop: 2 }}>
                       <Grid item sm>
                         <Field
                           as={TextField}
