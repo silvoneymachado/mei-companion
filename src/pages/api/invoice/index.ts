@@ -24,49 +24,65 @@ export default async function handler(
   }
 
   async function addItem(invoice: Invoice) {
-    const invoiceByNumber = await prisma.invoice.findFirst({
-      where: { invoiceNumber: invoice.invoiceNumber },
-    });
-
-    if (invoiceByNumber) {
-      res.status(409).json({
-        ok: false,
-        status: 409,
-        statusText: "Já existe um parceiro cadastrado com o CNPJ informado",
-      });
-    } else {
+    try {
       const result = await prisma.invoice.create({
         data: {
           userId: invoice.userId,
           partnerId: invoice.partnerId,
           invoiceNumber: invoice.invoiceNumber,
-          value: invoice.value,
+          value: Number(invoice.value),
           notes: invoice.notes,
+          paymentDate: invoice.paymentDate,
+          referenceDate: invoice.referenceDate,
         },
       });
       res.json(result);
+    } catch (error) {
+      res.status(500).json({
+        ok: false,
+        status: 500,
+        statusText: "Erro ao processar no banco de dados",
+      });
     }
   }
 
   async function getAll() {
-    const result = await prisma.invoice.findMany();
-    res.json(result);
+    try {
+      const result = await prisma.invoice.findMany();
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({
+        ok: false,
+        status: 500,
+        statusText: "Erro ao processar no banco de dados",
+      });
+    }
   }
 
   async function update(invoice: Invoice) {
-    console.info("update");
-    const result = await prisma.invoice.update({
-      where: { id: invoice.id },
-      data: {
-        id: invoice.id,
-        userId: invoice.userId,
-        partnerId: invoice.partnerId,
-        invoiceNumber: invoice.invoiceNumber,
-        value: invoice.value,
-        notes: invoice.notes,
-      },
-    });
+    try {
+      console.info("update");
+      const result = await prisma.invoice.update({
+        where: { id: invoice.id },
+        data: {
+          id: invoice.id,
+          userId: invoice.userId,
+          partnerId: invoice.partnerId,
+          invoiceNumber: invoice.invoiceNumber,
+          value: Number(invoice.value),
+          notes: invoice.notes,
+          paymentDate: invoice.paymentDate,
+          referenceDate: invoice.referenceDate,
+        },
+      });
 
-    res.json(result);
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({
+        ok: false,
+        status: 500,
+        statusText: "Erro ao processar no banco de dados",
+      });
+    }
   }
 }

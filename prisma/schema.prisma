@@ -41,28 +41,35 @@ model Partner {
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
   invoices      Invoice[]
+  Expense       Expense[]
 }
 
 model Invoice {
-  id            Int     @id @default(autoincrement())
-  user          User    @relation(fields: [userId], references: [id])
+  id            Int      @id @default(autoincrement())
+  user          User     @relation(fields: [userId], references: [id])
   userId        Int
-  partner       Partner @relation(fields: [partnerId], references: [id])
+  partner       Partner  @relation(fields: [partnerId], references: [id])
   partnerId     Int
-  invoiceNumber Int
+  invoiceNumber String   @unique
   value         Float
   notes         String
+  paymentDate   DateTime @map(name: "payment_date")
+  referenceDate DateTime @map(name: "reference_date")
 }
 
 model Expense {
   id            Int      @id @default(autoincrement())
   user          User     @relation(fields: [userId], references: [id])
   userId        Int
+  partner       Partner  @relation(fields: [partnerId], references: [id])
+  partnerId     Int
   name          String
   value         Float
   notes         String
   paymentDate   DateTime @map(name: "payment_date")
   referenceDate DateTime @map(name: "reference_date")
+  categoryId    Int
+  category      Category @relation(fields: [categoryId], references: [id])
   createdAt     DateTime @default(now()) @map(name: "created_at")
   updatedAt     DateTime @updatedAt @map(name: "updated_at")
 }
@@ -77,12 +84,13 @@ model Config {
 }
 
 model Category {
-  id          Int     @id @default(autoincrement())
-  user        User    @relation(fields: [userId], references: [id])
+  id          Int       @id @default(autoincrement())
+  user        User      @relation(fields: [userId], references: [id])
   userId      Int
   name        String
   description String
   active      Boolean
+  Expense     Expense[]
 }
 
 model Account {

@@ -8,7 +8,8 @@
     "start": "next start",
     "prisma:create-database": "npx prisma db push",
     "prisma:studio": "npx prisma studio",
-    "prisma:update-schema": "npx prisma generate"
+    "prisma:update-schema": "npx prisma generate",
+    "prisma:migrate-reset-drop-database": "prisma migrate reset"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +25,7 @@
     "add": "^2.0.6",
     "axios": "^0.23.0",
     "bcrypt": "^5.0.1",
+    "date-fns": "^2.25.0",
     "formik": "^2.2.9",
     "jsonwebtoken": "^8.5.1",
     "next": "9.5.5",
