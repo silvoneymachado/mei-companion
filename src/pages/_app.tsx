@@ -8,7 +8,6 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import AuthGuard from "../services/auth/authGuard";
-import { NextApplicationPage } from "../types/types";
 import { AlertProvider } from "../contexts/alertContext";
 import { AuthProvider } from "../contexts/authContext";
 import RootProvider from "../contexts";

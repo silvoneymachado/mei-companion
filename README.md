@@ -1,3 +1,32 @@
-# Fullstack Authentication Example with Next.js and NextAuth.js
+#Mei Companion
 
-This is the starter project for the fullstack tutorial with Next.js and Prisma. You can find the final version of this project in the [`final`](https://github.com/prisma/blogr-nextjs-prisma/tree/final) branch of this repo.
+##Aplicação voltada para o acompanhamento de notas fiscais emitidas
+### Teclonigias utilizadas
+- Next JS
+- Prisma ORM
+- Heroku (Para hospedagem da database Postgres)
+
+### O que é possível realizar com a aplicação
+- Criar usuário e senha
+- Realizar Login
+- Cadastrar parceiros
+- Cadastrar Notas emitidas
+- Cadastrar categorias de despesas
+
+### O que não é possível ainda (Funcionalidades futuras)
+- Cadastrar despesas
+- Cadastrar opções e limites
+- Visualizar gráficos
+
+
+### Disclamer
+
+Me empolguei com o desenvolvimento e a possibilidade de utilizar as tecnologias descritas 
+e fui desatento ao ponto de não ler toda a especificação do ponto "_Atividade seguindo as considerações
+As atividades foram realizadas levando em consideração as estruturas da API dispostas no link_"
+Com isso ficaram pendentes todas as tarefas descritas no tópico "O que não é possível ainda".
+Eu deveria ter aproveitado melhor o meu tempo, porém é o que temos. 
+
+Espero que considerem o meu esforço em sua avaliação. 
+
+Obrigado
