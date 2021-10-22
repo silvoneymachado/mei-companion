@@ -60,8 +60,6 @@ const  AuthProvider: React.FC = ({ children }) => {
       })
   
       api.defaults.headers['Authorization'] = `${token}`;
-
-      console.log(user);
   
       setUser(user);
       

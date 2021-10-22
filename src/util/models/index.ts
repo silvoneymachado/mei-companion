@@ -28,8 +28,10 @@ export type User = {
     id?: number
     userId?: number
     partnerId?: number
-    invoiceNumber: number
+    invoiceNumber: string
     value: string
+    paymentDate: Date
+    referenceDate: Date
     notes?: string
   }
   
