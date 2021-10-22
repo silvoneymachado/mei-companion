@@ -44,13 +44,14 @@ model Partner {
 }
 
 model Invoice {
-  user      User    @relation(fields: [userId], references: [id])
-  userId    Int
-  partner   Partner @relation(fields: [partnerId], references: [id])
-  partnerId Int
-  value     Float
-
-  @@id([userId, partnerId])
+  id            Int     @id @default(autoincrement())
+  user          User    @relation(fields: [userId], references: [id])
+  userId        Int
+  partner       Partner @relation(fields: [partnerId], references: [id])
+  partnerId     Int
+  invoiceNumber Int
+  value         Float
+  notes         String
 }
 
 model Expense {
@@ -59,6 +60,7 @@ model Expense {
   userId        Int
   name          String
   value         Float
+  notes         String
   paymentDate   DateTime @map(name: "payment_date")
   referenceDate DateTime @map(name: "reference_date")
   createdAt     DateTime @default(now()) @map(name: "created_at")
