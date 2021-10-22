@@ -23,45 +23,54 @@ export default async function handler(
     });
   }
 
-  async function addItem(expense: any) {
+  async function addItem(config: any) {
     try {
-      const result = await prisma.expense.create({
-        data: {
-          ...expense,
-          id: Number(expense.id),
-          value: Number(expense.value),
-        },
+      const configByCNPJ = await prisma.config.findFirst({
+        where: { name: config.name },
       });
-      res.json(result);
+
+      if (configByCNPJ) {
+        res.status(409).json({
+          ok: false,
+          status: 409,
+          statusText: "Já existe um parceiro cadastrado com o CNPJ informado",
+        });
+      } else {
+        const result = await prisma.config.create({
+          data: {
+            ...config
+          },
+        });
+        res.json(result);
+      }
     } catch (error) {
       res.status(500).json({
         ok: false,
         status: 500,
-        statusText: error.message,
+        statusText: "Erro ao processar no banco de dados",
       });
     }
   }
 
   async function getAll() {
     try {
-      const result = await prisma.expense.findMany();
+      const result = await prisma.config.findMany();
       res.json(result);
     } catch (error) {
       res.status(500).json({
         ok: false,
         status: 500,
-        statusText: error.message,
+        statusText: "Erro ao processar no banco de dados",
       });
     }
   }
 
-  async function update(expense: any) {
+  async function update(config: any) {
     try {
-      const result = await prisma.expense.update({
-        where: { id: expense.id },
+      const result = await prisma.config.update({
+        where: { id: config.id },
         data: {
-          ...expense,
-          value: Number(expense.value),
+          ...config
         },
       });
 
@@ -70,7 +79,7 @@ export default async function handler(
       res.status(500).json({
         ok: false,
         status: 500,
-        statusText: error.message,
+        statusText: "Erro ao processar no banco de dados",
       });
     }
   }

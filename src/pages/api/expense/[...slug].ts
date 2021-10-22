@@ -1,6 +1,5 @@
 import prisma from "../../../lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getDateMonthRange } from "../../../util/commonFn";
 
 export default async function handler(
   req: NextApiRequest,
