@@ -42,6 +42,7 @@ const  AuthProvider: React.FC = ({ children }) => {
 
     if (token) {
       const jwtToken = jwt.decode(token);
+      console.log(jwtToken);
       setUser(jwtToken as User);
     }
     setLoading(false);
@@ -60,8 +61,6 @@ const  AuthProvider: React.FC = ({ children }) => {
       })
   
       api.defaults.headers['Authorization'] = `${token}`;
-
-      console.log(user);
   
       setUser(user);
       

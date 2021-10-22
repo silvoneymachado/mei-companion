@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Card,
   CardHeader,
@@ -6,12 +7,16 @@ import {
   TextField,
   CardActions,
   Button,
-  Select,
-  MenuItem,
+  Autocomplete,
+  TextFieldProps,
+  CardContent,
 } from "@mui/material";
 import { Form, Formik, Field, FormikProps } from "formik";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import MobileDatePicker from "@mui/lab/MobileDatePicker";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout";
 import { NextApplicationPage } from "../../types/types";
 import { Invoice } from "../../util/models";
@@ -19,6 +24,7 @@ import * as Yup from "yup";
 import { useAuth } from "../../contexts/authContext";
 import { useInvoice } from "../../contexts/invoiceContext";
 import { usePartner } from "../../contexts/partnerContext";
+import { Partner } from ".prisma/client";
 
 const Details: NextApplicationPage<React.FC> = () => {
   const router = useRouter();
@@ -26,6 +32,7 @@ const Details: NextApplicationPage<React.FC> = () => {
   const { pid } = router.query;
   const { getById, create, update, loadedInvoice } = useInvoice();
   const { getAll: getAllPartners, partners } = usePartner();
+  const [selectedPartner, setSelectedPartner] = useState(null);
   let formikRef: FormikProps<Invoice>;
 
   const getId = () =>
@@ -39,8 +46,10 @@ const Details: NextApplicationPage<React.FC> = () => {
     id: getId(),
     userId: user.id,
     partnerId: null,
-    invoiceNumber: null,
-    value: null,
+    invoiceNumber: "",
+    value: '',
+    paymentDate: new Date(),
+    referenceDate: new Date(),
     notes: "",
   };
 
@@ -53,7 +62,12 @@ const Details: NextApplicationPage<React.FC> = () => {
   }, []);
 
   useEffect(() => {
-    formikRef.setValues(loadedInvoice);
+    if (getId()) {
+      formikRef.setValues(loadedInvoice);
+      setSelectedPartner(
+        partners.find((partner) => partner.id === loadedInvoice.partnerId)
+      );
+    }
   }, [loadedInvoice]);
 
   const requiredMessage = "Obrigatório";
@@ -62,11 +76,11 @@ const Details: NextApplicationPage<React.FC> = () => {
     value: Yup.number()
       .typeError("Digite apenas números")
       .required(requiredMessage),
-    invoiceNumber: Yup.number()
-      .typeError("Digite apenas números")
+    invoiceNumber: Yup.string()
       .max(44, "O CNPJ deve conter 44 dígitos")
-      .required(requiredMessage)
-      .nullable(),
+      .required(requiredMessage),
+    referenceDate: Yup.date().required(requiredMessage),
+    notes: Yup.string().required(requiredMessage),
   });
 
   const handleCancel = () => {
@@ -74,11 +88,26 @@ const Details: NextApplicationPage<React.FC> = () => {
   };
 
   const handleSubmit = (values: Invoice) => {
-    if (values.id) {
-      update(values);
+    const data = {
+      ...values,
+      userId: user.id,
+    };
+    if (values.id && values.userId) {
+      update(data);
     } else {
-      create(values);
+      create(data);
     }
+  };
+
+  const defaultProps = {
+    options: partners,
+    getOptionLabel: (partner: Partner) =>
+      `${partner.corporateName} - [${partner.cnpj}]`,
+  };
+
+  const handleSelectPartner = (partner: Partner) => {
+    setSelectedPartner(partner);
+    formikRef.setFieldValue("partnerId", partner?.id);
   };
 
   return (
@@ -90,114 +119,141 @@ const Details: NextApplicationPage<React.FC> = () => {
               getId() ? "Editar nota fiscal" : "Adicionar nova nota fiscal"
             }
           />
-          <Formik
-            innerRef={(p) => (formikRef = p)}
-            initialValues={formikInitialValues}
-            onSubmit={(values) => handleSubmit(values)}
-            validationSchema={SignUpValidationSchema}
-          >
-            {({ values, errors, touched }) => (
-              <Form>
-                <Grid container direction="column" spacing={2}>
-                  <Grid container direction="row" spacing={2}>
-                    <Grid item xs>
-                      <Field
-                        as={TextField}
-                        fullWidth
-                        label="Parceiro"
-                        select
-                        SelectProps={{
-                          value: values.partnerId,
-                          name: "partnerId",
-                          multiline: true,
-                        }}
-                        error={errors.partnerId && touched.partnerId}
-                        helperText={
-                          errors.partnerId && touched.partnerId
-                            ? errors.partnerId
-                            : null
-                        }
-                      >
-                        {partners && partners?.length === 0 ? (
-                          <MenuItem value="">
-                            <em>Por favor cadastre pelo menos um parceiro</em>
-                          </MenuItem>
-                        ) : (
-                          <MenuItem value="">
-                            <em>Selecione</em>
-                          </MenuItem>
-                        )}
-                        {partners?.map((partner, index) => (
-                          <MenuItem
-                            key={index}
-                            value={partner.id}
-                          >{`${partner.corporateName}[${partner.name}]`}</MenuItem>
-                        ))}
-                        {/* <MenuItem
-                        value=""
-                      >Selecione</MenuItem> */}
-                      </Field>
+          <CardContent>
+            <Formik
+              innerRef={(p) => (formikRef = p)}
+              initialValues={formikInitialValues}
+              onSubmit={(values) => handleSubmit(values)}
+              validationSchema={SignUpValidationSchema}
+            >
+              {({ values, errors, touched, setFieldValue }) => (
+                <Form>
+                  <Grid container direction="column" spacing={2}>
+                    <Grid container direction="row" spacing={2}>
+                      <Grid item xs>
+                        <Field
+                          as={Autocomplete}
+                          fullWidth
+                          clear
+                          onChange={(_e: any, newValue: Partner) =>
+                            handleSelectPartner(newValue)
+                          }
+                          value={selectedPartner}
+                          {...defaultProps}
+                          renderInput={(
+                            params: JSX.IntrinsicAttributes & TextFieldProps
+                          ) => <TextField {...params} label="Parceiro" />}
+                          error={errors.partnerId && touched.partnerId}
+                          helperText={
+                            errors.partnerId && touched.partnerId
+                              ? errors.partnerId
+                              : null
+                          }
+                        ></Field>
+                      </Grid>
+                      <Grid item sm>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                          <Field
+                            as={MobileDatePicker}
+                            value={values.referenceDate}
+                            label="Data de competência"
+                            onChange={(newValue: Date) =>
+                              setFieldValue("referenceDate", newValue)
+                            }
+                            renderInput={(
+                              params: JSX.IntrinsicAttributes & TextFieldProps
+                            ) => <TextField fullWidth {...params} />}
+                          />
+                        </LocalizationProvider>
+                      </Grid>
+                      <Grid item sm>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                          <Field
+                            as={MobileDatePicker}
+                            value={values.paymentDate}
+                            label="Data de recebimento"
+                            onChange={(newValue: Date) =>
+                              setFieldValue("paymentDate", newValue)
+                            }
+                            renderInput={(
+                              params: JSX.IntrinsicAttributes & TextFieldProps
+                            ) => <TextField fullWidth {...params} />}
+                          />
+                        </LocalizationProvider>
+                      </Grid>
                     </Grid>
-                    <Grid item sm>
-                      <Field
-                        as={TextField}
-                        fullWidth
-                        value={values.value}
-                        label="Valor"
-                        name="value"
-                        inputProps={{ inputMode: "numeric" }}
-                        error={errors.value && touched.value}
-                        helperText={
-                          errors.value && touched.value ? errors.value : null
-                        }
-                      />
+                    <Grid
+                      container
+                      direction="column"
+                      sx={{ marginTop: 2 }}
+                      spacing={2}
+                    >
+                      <Grid item>
+                        <Field
+                          as={TextField}
+                          fullWidth
+                          value={values.invoiceNumber}
+                          label="Chave de Acesso NF-e"
+                          name="invoiceNumber"
+                          inputProps={{ maxLength: 44, inputMode: "numeric" }}
+                          error={errors.invoiceNumber && touched.invoiceNumber}
+                          helperText={
+                            errors.invoiceNumber && touched.invoiceNumber
+                              ? errors.invoiceNumber
+                              : null
+                          }
+                        />
+                      </Grid>
                     </Grid>
-                    <Grid item sm>
-                      <Field
-                        as={TextField}
-                        fullWidth
-                        value={values.notes}
-                        label="Observações"
-                        name="notes"
-                        error={errors.notes && touched.notes}
-                        helperText={
-                          errors.notes && touched.notes ? errors.notes : null
-                        }
-                      />
+                    <Grid
+                      container
+                      direction="row"
+                      sx={{ marginTop: 2 }}
+                      spacing={2}
+                    >
+                      <Grid item sm>
+                        <Field
+                          as={TextField}
+                          fullWidth
+                          value={String(values.value)}
+                          label="Valor"
+                          name="value"
+                          inputProps={{ inputMode: "numeric" }}
+                          error={errors.value && touched.value}
+                          helperText={
+                            errors.value && touched.value ? errors.value : null
+                          }
+                        />
+                      </Grid>
+                      <Grid item sm>
+                        <Field
+                          as={TextField}
+                          fullWidth
+                          value={values.notes}
+                          label="Descrição"
+                          name="notes"
+                          error={errors.notes && touched.notes}
+                          helperText={
+                            errors.notes && touched.notes ? errors.notes : null
+                          }
+                        />
+                      </Grid>
                     </Grid>
                   </Grid>
-                  <Grid container direction="column">
-                    <Grid item sx={{ marginTop: 2 }}>
-                      <Field
-                        as={TextField}
-                        fullWidth
-                        value={values.invoiceNumber}
-                        label="Chave de Acesso NF-e"
-                        name="invoiceNumber"
-                        inputProps={{ maxLength: 44, inputMode: "numeric" }}
-                        error={errors.invoiceNumber && touched.invoiceNumber}
-                        helperText={
-                          errors.invoiceNumber && touched.invoiceNumber
-                            ? errors.invoiceNumber
-                            : null
-                        }
-                      />
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <CardActions
-                  sx={{ display: "flex", justifyContent: "flex-end" }}
-                >
-                  <Button variant="outlined" onClick={handleCancel}>
-                    Cancelar
-                  </Button>
-                  <Button type="submit" variant="contained">
-                    {getId() ? "Atualizar" : "Salvar"}
-                  </Button>
-                </CardActions>
-              </Form>
-            )}
-          </Formik>
+                  <CardActions
+                    sx={{ display: "flex", justifyContent: "flex-end" }}
+                  >
+                    <Button variant="outlined" onClick={handleCancel}>
+                      Cancelar
+                    </Button>
+                    <Button type="submit" variant="contained">
+                      {getId() ? "Atualizar" : "Salvar"}
+                    </Button>
+                  </CardActions>
+                </Form>
+              )}
+            </Formik>
+          </CardContent>
         </Container>
       </Card>
     </Layout>

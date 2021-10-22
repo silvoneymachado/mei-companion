@@ -36,7 +36,6 @@ export default async function handler(
     const result = await prisma.partner.delete({
       where: { id: id },
     });
-    console.log(result);
     res.json(result);
   }
 }
