@@ -10,6 +10,7 @@ import {
 import { Severity, useAlert } from "./alertContext";
 import { Invoice } from "../util/models";
 import { useRouter } from "next/router";
+import { useAuth } from "./authContext";
 
 type InvoiceContextType = {
   loading: boolean;
@@ -27,12 +28,15 @@ export const InvoiceContext = createContext({} as InvoiceContextType);
 const InvoiceProvider: React.FC = ({ children }) => {
   const { showAlert } = useAlert();
   const router = useRouter();
+  const { user } = useAuth();
   const [invoices, setInvoices] = useState<Invoice[] | null>(null);
   const [loadedInvoice, setLoadedInvoice] = useState({
     id: null,
-    userId: null,
+    userId: user.id,
     partnerId: null,
-    invoiceNumber: null,
+    invoiceNumber: '',
+    paymentDate: new Date(),
+    referenceDate: new Date(),
     value: '',
     notes: '',
   } as Invoice);

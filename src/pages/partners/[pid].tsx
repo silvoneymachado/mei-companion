@@ -6,6 +6,7 @@ import {
   TextField,
   CardActions,
   Button,
+  CardContent,
 } from "@mui/material";
 import { Form, Formik, Field, FormikProps } from "formik";
 import { useRouter } from "next/router";
@@ -42,14 +43,14 @@ const Details: NextApplicationPage<React.FC> = () => {
 
   useEffect(() => {
     const id = getId();
-    if(id) {
+    if (id) {
       getById(id);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     formikRef.setValues(loadedPartner);
-  }, [loadedPartner])
+  }, [loadedPartner]);
 
   const requiredMessage = "Obrigatório";
   const SignUpValidationSchema = Yup.object().shape({
@@ -87,63 +88,75 @@ const Details: NextApplicationPage<React.FC> = () => {
           <CardHeader
             title={getId() ? "Editar parceiro" : "Adicionar novo parceiro"}
           />
-          <Formik
-            innerRef={p => (formikRef = p)}
-            initialValues={formikInitialValues}
-            onSubmit={(values) => handleSubmit(values)}
-            validationSchema={SignUpValidationSchema}
-          >
-            {({ values, errors, touched }) => (
-              <Form>
-                <Grid container direction="row" spacing={2}>
-                  <Grid item xs>
-                    <Field
-                      as={TextField}
-                      fullWidth
-                      value={values.name}
-                      label="Nome"
-                      name="name"
-                      error={errors.name && touched.name}
-                      helperText={errors.name && touched.name ? errors.name : null}
-                    />
+          <CardContent>
+            <Formik
+              innerRef={(p) => (formikRef = p)}
+              initialValues={formikInitialValues}
+              onSubmit={(values) => handleSubmit(values)}
+              validationSchema={SignUpValidationSchema}
+            >
+              {({ values, errors, touched }) => (
+                <Form>
+                  <Grid container direction="row" spacing={2}>
+                    <Grid item xs>
+                      <Field
+                        as={TextField}
+                        fullWidth
+                        value={values.name}
+                        label="Nome"
+                        name="name"
+                        error={errors.name && touched.name}
+                        helperText={
+                          errors.name && touched.name ? errors.name : null
+                        }
+                      />
+                    </Grid>
+                    <Grid item xs>
+                      <Field
+                        as={TextField}
+                        fullWidth
+                        value={values.corporateName}
+                        label="Razão Social"
+                        name="corporateName"
+                        error={errors.corporateName && touched.corporateName}
+                        helperText={
+                          errors.corporateName && touched.corporateName
+                            ? errors.corporateName
+                            : null
+                        }
+                      />
+                    </Grid>
+                    <Grid item xs>
+                      <Field
+                        as={TextField}
+                        value={
+                          values.cnpj ?? formatCNPJ(values.cnpj).toString()
+                        }
+                        fullWidth
+                        label="CNPJ"
+                        name="cnpj"
+                        inputProps={{ maxLength: 18, inputMode: "numeric" }}
+                        error={errors.cnpj && touched.cnpj}
+                        helperText={
+                          errors.cnpj && touched.cnpj ? errors.cnpj : null
+                        }
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid item xs>
-                    <Field
-                      as={TextField}
-                      fullWidth
-                      value={values.corporateName}
-                      label="Razão Social"
-                      name="corporateName"
-                      error={errors.corporateName && touched.corporateName}
-                      helperText={errors.corporateName && touched.corporateName ? errors.corporateName : null}
-                    />
-                  </Grid>
-                  <Grid item xs>
-                    <Field
-                      as={TextField}
-                      value={values.cnpj ?? formatCNPJ(values.cnpj).toString()}
-                      fullWidth
-                      label="CNPJ"
-                      name="cnpj"
-                      inputProps={{ maxLength: 18, inputMode: "numeric" }}
-                      error={errors.cnpj && touched.cnpj}
-                      helperText={errors.cnpj && touched.cnpj ? errors.cnpj : null}
-                    />
-                  </Grid>
-                </Grid>
-                <CardActions
-                  sx={{ display: "flex", justifyContent: "flex-end" }}
-                >
-                  <Button variant="outlined" onClick={handleCancel}>
-                    Cancelar
-                  </Button>
-                  <Button type="submit" variant="contained">
-                    {getId() ? "Atualizar" : "Salvar"}
-                  </Button>
-                </CardActions>
-              </Form>
-            )}
-          </Formik>
+                  <CardActions
+                    sx={{ display: "flex", justifyContent: "flex-end" }}
+                  >
+                    <Button variant="outlined" onClick={handleCancel}>
+                      Cancelar
+                    </Button>
+                    <Button type="submit" variant="contained">
+                      {getId() ? "Atualizar" : "Salvar"}
+                    </Button>
+                  </CardActions>
+                </Form>
+              )}
+            </Formik>
+          </CardContent>
         </Container>
       </Card>
     </Layout>

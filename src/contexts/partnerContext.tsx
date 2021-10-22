@@ -10,6 +10,7 @@ import {
 import { Severity, useAlert } from "./alertContext";
 import { Partner } from "../util/models";
 import { useRouter } from "next/router";
+import { useAuth } from "./authContext";
 
 type PartnerContextType = {
   loading: boolean;
@@ -27,10 +28,11 @@ export const PartnerContext = createContext({} as PartnerContextType);
 const PartnerProvider: React.FC = ({ children }) => {
   const { showAlert } = useAlert();
   const router = useRouter();
+  const { user } = useAuth();
   const [partners, setPartners] = useState<Partner[] | null>(null);
   const [loadedPartner, setLoadedPartner] = useState({
     id: null,
-    userId: null,
+    userId: user.id,
     name: "",
     cnpj: "",
     corporateName: "",
