@@ -6,24 +6,25 @@ import {
   TextField,
   CardActions,
   Button,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
 import { Form, Formik, Field, FormikProps } from "formik";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import Layout from "../../components/layout";
 import { NextApplicationPage } from "../../types/types";
-import { Partner } from "../../util/models";
+import { Category } from "../../util/models";
 import * as Yup from "yup";
-import { formatCNPJ } from "../../util/masks";
 import { useAuth } from "../../contexts/authContext";
-import { usePartner } from "../../contexts/partnerContext";
+import { useCategory } from "../../contexts/categoryContext";
 
 const Details: NextApplicationPage<React.FC> = () => {
   const router = useRouter();
   const { user } = useAuth();
   const { pid } = router.query;
-  const { getById, create, update, loadedPartner } = usePartner();
-  let formikRef: FormikProps<Partner>;
+  const { getById, create, update, loadedCategory } = useCategory();
+  let formikRef: FormikProps<Category>;
 
   const getId = () =>
     isNaN(parseInt(String(pid)))
@@ -32,35 +33,29 @@ const Details: NextApplicationPage<React.FC> = () => {
       ? null
       : parseInt(String(pid));
 
-  const formikInitialValues: Partner = {
+  const formikInitialValues: Category = {
     id: getId(),
     userId: user.id,
     name: "",
-    cnpj: "",
-    corporateName: "",
+    description: "",
+    active: true,
   };
 
   useEffect(() => {
     const id = getId();
-    if(id) {
+    if (id) {
       getById(id);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    formikRef.setValues(loadedPartner);
-  }, [loadedPartner])
+    formikRef.setValues(loadedCategory);
+  }, [loadedCategory]);
 
   const requiredMessage = "Obrigatório";
   const SignUpValidationSchema = Yup.object().shape({
     name: Yup.string()
       .min(2, "Digite um nome de pelo menos 2 dígitos")
-      .required(requiredMessage),
-    corporateName: Yup.string()
-      .min(2, "Digite um nome de pelo menos 2 dígitos")
-      .required(requiredMessage),
-    cnpj: Yup.string()
-      .max(18, "O CNPJ deve conter 14 dígitos")
       .required(requiredMessage),
   });
 
@@ -68,11 +63,12 @@ const Details: NextApplicationPage<React.FC> = () => {
     router.back();
   };
 
-  const handleSubmit = (values: Partner) => {
+  const handleSubmit = (values: Category) => {
     const data = {
       ...values,
       userId: user.id,
     };
+
     if (data.id && data.userId) {
       update(data);
     } else {
@@ -85,10 +81,10 @@ const Details: NextApplicationPage<React.FC> = () => {
       <Card sx={{ display: "flex" }}>
         <Container maxWidth="lg">
           <CardHeader
-            title={getId() ? "Editar parceiro" : "Adicionar novo parceiro"}
+            title={getId() ? "Editar categoria" : "Adicionar nova categoria"}
           />
           <Formik
-            innerRef={p => (formikRef = p)}
+            innerRef={(p) => (formikRef = p)}
             initialValues={formikInitialValues}
             onSubmit={(values) => handleSubmit(values)}
             validationSchema={SignUpValidationSchema}
@@ -104,30 +100,37 @@ const Details: NextApplicationPage<React.FC> = () => {
                       label="Nome"
                       name="name"
                       error={errors.name && touched.name}
-                      helperText={errors.name && touched.name ? errors.name : null}
+                      helperText={
+                        errors.name && touched.name ? errors.name : null
+                      }
                     />
                   </Grid>
                   <Grid item xs>
                     <Field
                       as={TextField}
                       fullWidth
-                      value={values.corporateName}
-                      label="Razão Social"
-                      name="corporateName"
-                      error={errors.corporateName && touched.corporateName}
-                      helperText={errors.corporateName && touched.corporateName ? errors.corporateName : null}
+                      value={values.description}
+                      label="Descrição"
+                      name="description"
+                      error={errors.description && touched.description}
+                      helperText={
+                        errors.description && touched.description
+                          ? errors.description
+                          : null
+                      }
                     />
                   </Grid>
                   <Grid item xs>
                     <Field
-                      as={TextField}
-                      value={values.cnpj ?? formatCNPJ(values.cnpj).toString()}
+                      as={FormControlLabel}
                       fullWidth
-                      label="CNPJ"
-                      name="cnpj"
+                      label="Ativo"
+                      control={<Switch name="active" value={values.active} checked={values.active}/>}
                       inputProps={{ maxLength: 18, inputMode: "numeric" }}
-                      error={errors.cnpj && touched.cnpj}
-                      helperText={errors.cnpj && touched.cnpj ? errors.cnpj : null}
+                      error={errors.active && touched.active}
+                      helperText={
+                        errors.active && touched.active ? errors.active : null
+                      }
                     />
                   </Grid>
                 </Grid>

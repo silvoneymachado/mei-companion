@@ -92,7 +92,7 @@ const Details: NextApplicationPage<React.FC> = () => {
       ...values,
       userId: user.id,
     };
-    if (values.id && values.userId) {
+    if (data.id && data.userId) {
       update(data);
     } else {
       create(data);

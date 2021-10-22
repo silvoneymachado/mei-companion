@@ -12,6 +12,7 @@ import { AlertProvider } from "../contexts/alertContext";
 import { AuthProvider } from "../contexts/authContext";
 import { PartnerProvider } from "../contexts/partnerContext";
 import { InvoiceProvider } from "../contexts/invoiceContext";
+import { CategoryProvider } from "../contexts/categoryContext";
 
 const App = (props: AppProps) => {
   const {
@@ -36,7 +37,9 @@ const App = (props: AppProps) => {
             <AuthGuard>
               <PartnerProvider>
                 <InvoiceProvider>
-                <Component {...pageProps} />
+                  <CategoryProvider>
+                    <Component {...pageProps} />
+                  </CategoryProvider>
                 </InvoiceProvider>
               </PartnerProvider>
             </AuthGuard>
