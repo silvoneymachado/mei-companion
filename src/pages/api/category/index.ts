@@ -1,6 +1,6 @@
 import prisma from "../../../lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
-import { Partner } from "../../../util/models";
+import { Category } from "../../../util/models";
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -23,25 +23,25 @@ export default async function handler(
     });
   }
 
-  async function addItem(partner: Partner) {
+  async function addItem(category: Category) {
     try {
-      const partnerByCNPJ = await prisma.partner.findFirst({
-        where: { cnpj: partner.cnpj },
+      const categoryByCNPJ = await prisma.category.findFirst({
+        where: { name: category.name },
       });
 
-      if (partnerByCNPJ) {
+      if (categoryByCNPJ) {
         res.status(409).json({
           ok: false,
           status: 409,
           statusText: "Já existe um parceiro cadastrado com o CNPJ informado",
         });
       } else {
-        const result = await prisma.partner.create({
+        const result = await prisma.category.create({
           data: {
-            name: partner.name,
-            cnpj: partner.cnpj,
-            corporateName: partner.corporateName,
-            userId: partner.userId,
+            name: category.name,
+            description: category.description,
+            active: category.active,
+            userId: category.userId,
           },
         });
         res.json(result);
@@ -57,7 +57,7 @@ export default async function handler(
 
   async function getAll() {
     try {
-      const result = await prisma.partner.findMany();
+      const result = await prisma.category.findMany();
       res.json(result);
     } catch (error) {
       res.status(500).json({
@@ -68,16 +68,16 @@ export default async function handler(
     }
   }
 
-  async function update(partner: Partner) {
+  async function update(category: Category) {
     try {
-      const result = await prisma.partner.update({
-        where: { id: partner.id },
+      const result = await prisma.category.update({
+        where: { id: category.id },
         data: {
-          name: partner.name,
-          cnpj: partner.cnpj,
-          corporateName: partner.corporateName,
-          userId: partner.userId,
-          id: partner.id,
+          id: category.id,
+          name: category.name,
+          description: category.description,
+          active: category.active,
+          userId: category.userId,
         },
       });
 

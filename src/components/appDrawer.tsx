@@ -57,19 +57,19 @@ const AppDrawer: React.FC<DrawerProps> = (props: DrawerProps) => {
       route: "/partners",
     },
     {
-      label: "Lançamentos",
+      label: "Lançamentos - NF-e",
       icon: <Receipt />,
       route: "/invoices",
-    },
-    {
-      label: "Despesas",
-      icon: <Description />,
-      route: "/expenses",
     },
     {
       label: "Categorias",
       icon: <Category />,
       route: "/categories",
+    },
+    {
+      label: "Despesas",
+      icon: <Description />,
+      route: "/expenses",
     },
     {
       label: "Configurações",

@@ -26,7 +26,7 @@ export default async function handler(
 
   async function getById(id: number) {
     try {
-      const result = await prisma.partner.findFirst({
+      const result = await prisma.category.findFirst({
         where: { id: id },
       });
       res.json(result);
@@ -41,7 +41,7 @@ export default async function handler(
 
   async function remove(id: number) {
     try {
-      const result = await prisma.partner.delete({
+      const result = await prisma.category.delete({
         where: { id: id },
       });
       res.json(result);

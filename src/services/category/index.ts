@@ -1,12 +1,12 @@
-import { Partner } from "../../util/models";
+import { Category } from "../../util/models";
 import { api } from "../api";
 
-const basePath = "/api/partner/";
+const basePath = "/api/category/";
 
-export function addPartner(data: Partner): Promise<Partner> {
+export function addCategory(data: Category): Promise<Category> {
   return new Promise((resolve, reject) => {
     try {
-      api.post<Partner>(basePath, data).then((res) => {
+      api.post<Category>(basePath, data).then((res) => {
         resolve(res.data);
       });
     } catch (error) {
@@ -15,10 +15,10 @@ export function addPartner(data: Partner): Promise<Partner> {
   });
 }
 
-export function updatePartner(data: Partner): Promise<Partner> {
+export function updateCategory(data: Category): Promise<Category> {
   return new Promise((resolve, reject) => {
     try {
-      api.put<Partner>(basePath, data).then((res) => {
+      api.put<Category>(basePath, data).then((res) => {
         resolve(res.data);
       });
     } catch (error) {
@@ -27,10 +27,10 @@ export function updatePartner(data: Partner): Promise<Partner> {
   });
 }
 
-export function getAllPartners(): Promise<Partner[]> {
+export function getAllCategories(): Promise<Category[]> {
   return new Promise((resolve, reject) => {
     try {
-      api.get<Partner[]>(basePath).then((res) => {
+      api.get<Category[]>(basePath).then((res) => {
         resolve(res.data);
       });
     } catch (error) {
@@ -39,10 +39,10 @@ export function getAllPartners(): Promise<Partner[]> {
   });
 }
 
-export function getPartnerById(id: number): Promise<Partner> {
+export function getCategoryById(id: number): Promise<Category> {
   return new Promise((resolve, reject) => {
     try {
-      api.get<Partner>(`${basePath}${id}`).then((res) => {
+      api.get<Category>(`${basePath}${id}`).then((res) => {
         resolve(res.data);
       });
     } catch (error) {
@@ -51,7 +51,7 @@ export function getPartnerById(id: number): Promise<Partner> {
   });
 }
 
-export function removePartner(id: number): Promise<boolean> {
+export function removeCategory(id: number): Promise<boolean> {
   return new Promise((resolve, reject) => {
     try {
       api.delete(`${basePath}${id}`).then((res) => {

@@ -27,6 +27,7 @@ export default async function handler(
     try {
       const result = await prisma.invoice.create({
         data: {
+          id: invoice.id,
           userId: invoice.userId,
           partnerId: invoice.partnerId,
           invoiceNumber: invoice.invoiceNumber,
@@ -61,7 +62,6 @@ export default async function handler(
 
   async function update(invoice: Invoice) {
     try {
-      console.info("update");
       const result = await prisma.invoice.update({
         where: { id: invoice.id },
         data: {
