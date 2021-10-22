@@ -1,6 +1,5 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Send, Visibility, VisibilityOff } from "@mui/icons-material";
 import {
-  Button,
   Container,
   FormHelperText,
   Grid,
@@ -9,16 +8,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import LoadingButton from '@mui/lab/LoadingButton';
 import { Field, Form, Formik } from "formik";
 import React, { useState } from "react";
 import * as Yup from "yup";
-import Layout from "../../components/layout";
-import { Severity, useAlert } from "../../contexts/alert";
 import { useAuth } from "../../contexts/authContext";
 
 const SignIn: React.FC = () => {
-  const { showAlert } = useAlert();
-  const { signIn } = useAuth();
+  const { signIn, loading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const SigninValidationSchema = Yup.object().shape({
     email: Yup.string().email("Email inválido").required("Obrigatório"),
@@ -109,9 +106,16 @@ const SignIn: React.FC = () => {
                 ) : null}
               </Grid>
               <Grid item>
-                <Button variant="contained" fullWidth type="submit">
+                <LoadingButton
+                  loading={loading}
+                  loadingPosition="start"
+                  startIcon={<Send />}
+                  variant="contained"
+                  fullWidth
+                  type="submit"
+                >
                   Entrar
-                </Button>
+                </LoadingButton>
               </Grid>
             </Grid>
           </Form>

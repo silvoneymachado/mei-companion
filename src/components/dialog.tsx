@@ -42,8 +42,8 @@ const Dialog: React.FC<Props> = (props: Props) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onCancel}>{cancelText ?? "Disagree"}</Button>
-          <Button onClick={onConfirm} autoFocus>
+          <Button onClick={onCancel} color="info">{cancelText ?? "Cancelar"}</Button>
+          <Button onClick={onConfirm} autoFocus color="error">
             {confirmText ?? "Confirmar"}
           </Button>
         </DialogActions>

@@ -8,16 +8,19 @@ type SignInRequestData = {
 type SigninResponseData = {
   token: string;
   user: {
+    id: number;
     name: string;
     email: string;
   };
 };
 
-export function signInRequest(data: SignInRequestData): Promise<SigninResponseData> {
-return new Promise(async (resolve, reject) => {
+export function signInRequest(
+  data: SignInRequestData
+): Promise<SigninResponseData> {
+  return new Promise(async(resolve, reject) => {
     try {
       const res = await api.post<SigninResponseData>("/api/signin", data);
-  
+
       resolve({
         token: res.data.token,
         user: res.data.user,
@@ -25,6 +28,5 @@ return new Promise(async (resolve, reject) => {
     } catch (error) {
       reject(error);
     }
-})
+  });
 }
- 

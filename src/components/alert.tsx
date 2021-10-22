@@ -1,7 +1,7 @@
 import React from 'react';
 import { Stack, Alert, AlertTitle, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useAlert } from "../contexts/alert";
+import { useAlert } from "../contexts/alertContext";
 
 const AlertComponent: React.FC = () => {
   const { isAlertOpen, alertText, alertSeverity, alertTitle, dismissAlert } =

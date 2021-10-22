@@ -1,22 +1,22 @@
 import { AppProps } from "next/app";
 import React, { useEffect } from "react";
-import { Provider as SessionProvider } from "next-auth/client";
 import theme from "../theme";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { NextPage } from "next";
 import AuthGuard from "../services/auth/authGuard";
 import { NextApplicationPage } from "../types/types";
-import { AlertProvider } from "../contexts/alert";
+import { AlertProvider } from "../contexts/alertContext";
 import { AuthProvider } from "../contexts/authContext";
+import { PartnerProvider } from "../contexts/partnerContext";
+import { InvoiceProvider } from "../contexts/invoiceContext";
 
 const App = (props: AppProps) => {
   const {
     Component,
-    pageProps: { session, ...pageProps },
+    pageProps: { ...pageProps },
   }: { Component: NextApplicationPage; pageProps: any } = props;
 
   useEffect(() => {
@@ -34,7 +34,11 @@ const App = (props: AppProps) => {
         <AuthProvider>
           {Component.auth ? (
             <AuthGuard>
-              <Component {...pageProps} />
+              <PartnerProvider>
+                <InvoiceProvider>
+                <Component {...pageProps} />
+                </InvoiceProvider>
+              </PartnerProvider>
             </AuthGuard>
           ) : (
             // public page

@@ -3,11 +3,11 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Divider, styled } from "@mui/material";
+import { Button, styled } from "@mui/material";
 import { useAuth } from "../contexts/authContext";
+import { useRouter } from "next/router";
 
 const drawerWidth = 240;
 
@@ -37,6 +37,7 @@ const AppBar = styled(MuiAppBar, {
 const ButtonAppBar = (props: AppBarProps) => {
   const { open, toggledrawer } = props;
   const { user } = useAuth();
+  const router = useRouter();
 
   const renderSessionControllers = () => (
     <>
@@ -45,6 +46,10 @@ const ButtonAppBar = (props: AppBarProps) => {
       </Typography>
     </>
   );
+
+  const goHome = () => {
+    router.replace("/dashboard");
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -65,7 +70,14 @@ const ButtonAppBar = (props: AppBarProps) => {
             </IconButton>
           )}
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            MEI Companion
+            <Button
+              variant="text"
+              onClick={goHome}
+              sx={{ textTransform: "none" }}
+              color="inherit"
+            >
+              MEI Companion
+            </Button>
           </Typography>
           {!!user && renderSessionControllers()}
         </Toolbar>

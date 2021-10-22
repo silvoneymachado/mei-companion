@@ -5,10 +5,10 @@ import jwt from 'jsonwebtoken';
 
 import { signInRequest } from "../services/auth";
 import { api } from "../services/api";
-import { throws } from "assert";
-import { Severity, useAlert } from "./alert";
+import { Severity, useAlert } from "./alertContext";
 
 type User = {
+  id: number;
   name: string;
   email: string;
 }
@@ -59,7 +59,9 @@ const  AuthProvider: React.FC = ({ children }) => {
         maxAge: 60 * 60 * 1, // 1 hour
       })
   
-      api.defaults.headers['Authorization'] = `Bearer ${token}`;
+      api.defaults.headers['Authorization'] = `${token}`;
+
+      console.log(user);
   
       setUser(user);
       
@@ -74,7 +76,7 @@ const  AuthProvider: React.FC = ({ children }) => {
     setLoading(true);
     destroyCookie(undefined, 'nextauth.token');
     setLoading(false);
-    router.replace('/singIn');
+    router.replace('/home');
   }
 
   return (

@@ -19,9 +19,9 @@ export default async function handle(
   });
 
   if (usrByEmail || usrByCnpj) {
-    res.status(400).json({
+    res.status(409).json({
         ok: false,
-        status: 400,
+        status: 409,
         statusText: "Erro ao criar usuário: email ou cnpj já utilizados",
       });
   } else {

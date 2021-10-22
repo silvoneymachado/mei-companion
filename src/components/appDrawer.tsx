@@ -7,6 +7,7 @@ import {
   Category,
   Settings,
   Logout,
+  Dashboard,
 } from "@mui/icons-material";
 import {
   IconButton,
@@ -18,6 +19,7 @@ import {
   CSSObject,
   styled,
   Theme,
+  Tooltip,
 } from "@mui/material";
 import React, { useState } from "react";
 
@@ -44,6 +46,11 @@ const AppDrawer: React.FC<DrawerProps> = (props: DrawerProps) => {
   const { signOut } = useAuth();
 
   const menuItems: MenuItem[] = [
+    {
+      label: "Dashboard",
+      icon: <Dashboard />,
+      route: "/dashboard",
+    },
     {
       label: "Parceiros",
       icon: <Group />,
@@ -89,21 +96,25 @@ const AppDrawer: React.FC<DrawerProps> = (props: DrawerProps) => {
       <Divider />
       <List>
         {menuItems.map((item, index) => (
-          <ListItem button key={index} onClick={() => navigate(item)}>
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.label} />
-          </ListItem>
+          <Tooltip key={index} title={item.label} placement="right" arrow>
+            <ListItem button onClick={() => navigate(item)}>
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.label} />
+            </ListItem>
+          </Tooltip>
         ))}
-        <ListItem button onClick={() => setIsModalOpen(true)}>
-          <ListItemIcon>
-            <Logout />
-          </ListItemIcon>
-          <ListItemText primary={"Sair"} />
-        </ListItem>
+        <Tooltip title="Sair" placement="right" arrow>
+          <ListItem button onClick={() => setIsModalOpen(true)}>
+            <ListItemIcon>
+              <Logout />
+            </ListItemIcon>
+            <ListItemText primary={"Sair"} />
+          </ListItem>
+        </Tooltip>
       </List>
       <Divider />
       <Dialog
-        contentText="Deseja realmente sair da aplicação?"
+        contentText="Deseja sair da aplicação?"
         title="Sair"
         onConfirm={() => confirmSignOut()}
         open={isModalOpen}

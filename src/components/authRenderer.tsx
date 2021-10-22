@@ -1,9 +1,10 @@
-import React, { ReactNode } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React from "react";
 import { useAuth } from "../contexts/authContext";
 
 interface Props {
-  protectedComponent: ReactNode;
-  fallBackComponent?: ReactNode;
+  protectedComponent: any;
+  fallBackComponent?: any;
 }
 
 const AuthRenderer: React.FC<Props> = (props: Props) => {

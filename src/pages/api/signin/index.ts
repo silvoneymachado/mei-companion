@@ -1,6 +1,6 @@
 import prisma from "../../../lib/prisma";
-import * as bcrypt from "bcrypt";
 import { NextApiRequest, NextApiResponse } from "next";
+import * as bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export default async function handle(
@@ -26,6 +26,7 @@ export default async function handle(
       res.json({
         token: jwt.sign(
           {
+            id: usrByEmail.id,
             name: usrByEmail.name,
             email: usrByEmail.email,
           },

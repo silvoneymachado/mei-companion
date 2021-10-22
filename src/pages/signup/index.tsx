@@ -13,7 +13,7 @@ import { Field, Form, Formik } from "formik";
 import { User } from "next-auth";
 import React, { useState } from "react";
 import * as Yup from "yup";
-import { Severity, useAlert } from "../../contexts/alert";
+import { Severity, useAlert } from "../../contexts/alertContext";
 import { formatCNPJ, formatPhoneNumber } from "../../util/masks";
 
 interface Props {

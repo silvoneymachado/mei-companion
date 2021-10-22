@@ -11,7 +11,7 @@ const AuthGuard: React.FC = ({ children }) => {
   const isUser = !!user;
 
   const signIn = () => {
-    setMessage('Você precisa realizar o login para acessar este recurso.');
+    setMessage('Você precisa realizar o login para acessar este recurso. Você será redirecionado em 5 segundos.');
 
     setTimeout(() => {
       router.replace("/");

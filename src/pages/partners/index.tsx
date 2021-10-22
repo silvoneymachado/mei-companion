@@ -1,14 +1,101 @@
-import { Container, Typography } from "@mui/material";
-import React from "react";
+import { AddCircle } from "@mui/icons-material";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Container,
+  IconButton,
+  List,
+} from "@mui/material";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import CustomListItem from "../../components/customListItem";
 import Layout from "../../components/layout";
 import { NextApplicationPage } from "../../types/types";
+import Dialog from "../../components/dialog";
+import { useRouter } from "next/router";
+import { usePartner } from "../../contexts/partnerContext";
 
 const Partners: NextApplicationPage<React.FC> = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [itemId, setItemId] = useState(null);
+  const router = useRouter();
+  const { partners, getAll, remove, loading } = usePartner();
+
+  useEffect(() => {
+    getAll();
+  }, []);
+
+  const confirmDelete = () => {
+    remove(itemId);
+    setIsModalOpen(false);
+    getAll();
+  };
+
+  const handleDelete = (id: number) => {
+    setItemId(id);
+    setIsModalOpen(true);
+  };
+
+  const handleEdit = (id: number) => {
+    router.push(`/partners/${id}`);
+  };
+
   return (
     <Layout>
-      <Container maxWidth="lg">
-        <Typography variant="h2">Partners</Typography>
-      </Container>
+      <Card sx={{ display: "flex" }}>
+        <Container maxWidth="lg">
+          <CardHeader
+            title="Parceiros"
+            action={
+              <Link href="/partners/[pid]" as="/partners/new">
+                <a>
+                  <IconButton aria-label="addNew">
+                    <AddCircle />
+                  </IconButton>
+                </a>
+              </Link>
+            }
+          />
+          <CardContent>
+            <List>
+              {partners?.map((partner, index) => (
+                <CustomListItem
+                  key={index}
+                  primaryText={partner.corporateName}
+                  secondaryText={partner.name}
+                  description={partner.cnpj}
+                  onDelete={handleDelete}
+                  onEdit={handleEdit}
+                  id={partner.id}
+                />
+              ))}
+              {(partners?.length === 0 || !partners) && !loading && (
+                <CustomListItem
+                  primaryText=""
+                  secondaryText="Adicione um parceiro clicando no botão à sua direita"
+                  hideActions={true}
+                />
+              )}
+
+              {loading && (
+                <CustomListItem
+                primaryText=""
+                secondaryText="Aguarde..."
+                hideActions={true}
+              />
+              )}
+            </List>
+          </CardContent>
+        </Container>
+      </Card>
+      <Dialog
+        contentText="Deseja excluir?"
+        title=""
+        onConfirm={() => confirmDelete()}
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+      />
     </Layout>
   );
 };
