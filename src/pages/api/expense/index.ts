@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import prisma from "../../../lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Expense } from "../../../util/models";
@@ -23,11 +24,12 @@ export default async function handler(
     });
   }
 
-  async function addItem(expense: Expense) {
+  async function addItem(expense: any) {
     try {
       const result = await prisma.expense.create({
         data: {
           ...expense,
+          id: Number(expense.id),
           value: Number(expense.value),
         },
       });
@@ -54,7 +56,7 @@ export default async function handler(
     }
   }
 
-  async function update(expense: Expense) {
+  async function update(expense: any) {
     try {
       const result = await prisma.expense.update({
         where: { id: expense.id },

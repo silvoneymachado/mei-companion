@@ -144,7 +144,7 @@ const Details: NextApplicationPage<React.FC> = () => {
         <Container maxWidth="lg">
           <CardHeader
             title={
-              getId() ? "Editar nota fiscal" : "Adicionar nova nota fiscal"
+              getId() ? "Editar despesa" : "Adicionar nova despesa"
             }
           />
           <CardContent>
