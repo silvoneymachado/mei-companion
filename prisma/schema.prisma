@@ -42,8 +42,6 @@ model Partner {
   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
   invoices      Invoice[]
   Expense       Expense[]
-
-  @@map(name: "partners")
 }
 
 model Invoice {
@@ -57,8 +55,6 @@ model Invoice {
   notes         String
   paymentDate   DateTime @map(name: "payment_date")
   referenceDate DateTime @map(name: "reference_date")
-
-  @@map(name: "invoices")
 }
 
 model Expense {
@@ -76,8 +72,6 @@ model Expense {
   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
   Category      Category? @relation(fields: [categoryId], references: [id])
   categoryId    Int?
-
-  @@map(name: "expenses")
 }
 
 model Config {
@@ -87,8 +81,6 @@ model Config {
   name   String
   value  Float
   active Boolean
-
-  @@map(name: "configs")
 }
 
 model Category {
@@ -99,8 +91,6 @@ model Category {
   description String
   active      Boolean
   Expense     Expense[]
-
-  @@map(name: "categories")
 }
 
 model Account {
