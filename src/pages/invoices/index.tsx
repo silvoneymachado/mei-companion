@@ -67,7 +67,8 @@ const Invoices: NextApplicationPage<React.FC> = () => {
                       views={["year", "month"]}
                       label="Year and Month"
                       value={selectedDate}
-                      onChange={(newValue) => {
+                      onChange={() => ({})}
+                      onMonthChange={(newValue) => {
                         handleChangeDate(newValue);
                       }}
                       renderInput={(params) => (
