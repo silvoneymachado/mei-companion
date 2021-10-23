@@ -19,6 +19,8 @@
 - Visualizar gráficos
 
 
+Para testat a aplicação siga o [link](https://mei-companion.vercel.app/)
+
 ### Disclamer
 
 Me empolguei com o desenvolvimento e a possibilidade de utilizar as tecnologias descritas 
