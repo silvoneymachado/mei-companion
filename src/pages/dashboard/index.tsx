@@ -18,7 +18,7 @@ const Dashboard: NextApplicationPage<React.FC> = () => {
       <Card sx={{ display: "flex" }}>
         <Container maxWidth="lg">
           <CardHeader
-            title="DashBoard"
+            title="DashBoard (Em desenvolvimento)"
             action={
               <Grid container spacing={2} justifyContent="row">
                 <Grid item>
