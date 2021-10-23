@@ -45,10 +45,10 @@ export default async function handle(
       notFoundRes();
     }
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       ok: false,
-      status: 400,
-      statusText: "Internal Server error",
+      status: 500,
+      statusText: error.message,
     });
   }
 }

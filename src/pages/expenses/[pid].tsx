@@ -40,13 +40,12 @@ const Details: NextApplicationPage<React.FC> = () => {
 
   const getId = () =>
     isNaN(parseInt(String(pid)))
-      ? undefined
+      ? null
       : parseInt(String(pid)) === 0
-      ? undefined
+      ? null
       : parseInt(String(pid));
 
   const formikInitialValues: Expense = {
-    id: getId(),
     userId: user.id,
     name: "",
     partnerId: 0,
@@ -106,13 +105,19 @@ const Details: NextApplicationPage<React.FC> = () => {
   };
 
   const handleSubmit = (values: Expense) => {
-    const data = {
-      ...values,
-      userId: user.id,
-    };
-    if (data.id && data.userId) {
+    const id = getId();
+    if (id && user.id) {
+      const data = {
+        ...values,
+        id: id,
+        userId: user.id,
+      };
       update(data);
     } else {
+      const data = {
+        ...values,
+        userId: user.id,
+      };
       create(data);
     }
   };

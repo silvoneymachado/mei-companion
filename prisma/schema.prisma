@@ -41,6 +41,9 @@ model Partner {
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
   invoices      Invoice[]
+  Expense       Expense[]
+
+  @@map(name: "partners")
 }
 
 model Invoice {
@@ -54,22 +57,27 @@ model Invoice {
   notes         String
   paymentDate   DateTime @map(name: "payment_date")
   referenceDate DateTime @map(name: "reference_date")
+
+  @@map(name: "invoices")
 }
 
 model Expense {
-  id            Int      @id @default(autoincrement())
-  user          User     @relation(fields: [userId], references: [id])
+  id            Int       @id @default(autoincrement())
+  user          User      @relation(fields: [userId], references: [id])
   userId        Int
-  partnerId     Int
+  partnerId     Int?
+  partner       Partner?  @relation(fields: [partnerId], references: [id])
   name          String
   value         Float
   notes         String
-  paymentDate   DateTime @map(name: "payment_date")
-  referenceDate DateTime @map(name: "reference_date")
-  categoryId    Int
-  category      Category @relation(fields: [categoryId], references: [id])
-  createdAt     DateTime @default(now()) @map(name: "created_at")
-  updatedAt     DateTime @updatedAt @map(name: "updated_at")
+  paymentDate   DateTime  @map(name: "payment_date")
+  referenceDate DateTime  @map(name: "reference_date")
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  Category      Category? @relation(fields: [categoryId], references: [id])
+  categoryId    Int?
+
+  @@map(name: "expenses")
 }
 
 model Config {
@@ -79,6 +87,8 @@ model Config {
   name   String
   value  Float
   active Boolean
+
+  @@map(name: "configs")
 }
 
 model Category {
@@ -89,6 +99,8 @@ model Category {
   description String
   active      Boolean
   Expense     Expense[]
+
+  @@map(name: "categories")
 }
 
 model Account {

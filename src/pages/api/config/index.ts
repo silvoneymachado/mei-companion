@@ -47,7 +47,7 @@ export default async function handler(
       res.status(500).json({
         ok: false,
         status: 500,
-        statusText: "Erro ao processar no banco de dados",
+        statusText: error.message,
       });
     }
   }
@@ -60,7 +60,7 @@ export default async function handler(
       res.status(500).json({
         ok: false,
         status: 500,
-        statusText: "Erro ao processar no banco de dados",
+        statusText: error.message,
       });
     }
   }
@@ -79,7 +79,7 @@ export default async function handler(
       res.status(500).json({
         ok: false,
         status: 500,
-        statusText: "Erro ao processar no banco de dados",
+        statusText: error.message,
       });
     }
   }

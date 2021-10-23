@@ -51,7 +51,7 @@ const Categories: NextApplicationPage<React.FC> = () => {
               <Link href="/categories/[pid]" as="/categories/new">
                 <a>
                   <IconButton aria-label="addNew">
-                    <AddCircle />
+                    <AddCircle fontSize="large" />
                   </IconButton>
                 </a>
               </Link>
@@ -64,7 +64,7 @@ const Categories: NextApplicationPage<React.FC> = () => {
                   key={index}
                   primaryText={category.name}
                   secondaryText={category.description}
-                  description={category.active ? 'Ativo' : 'Inativo'}
+                  description={category.active ? "Ativo" : "Inativo"}
                   onDelete={handleDelete}
                   onEdit={handleEdit}
                   id={category.id}
@@ -80,10 +80,10 @@ const Categories: NextApplicationPage<React.FC> = () => {
 
               {loading && (
                 <CustomListItem
-                primaryText=""
-                secondaryText="Aguarde..."
-                hideActions={true}
-              />
+                  primaryText=""
+                  secondaryText="Aguarde..."
+                  hideActions={true}
+                />
               )}
             </List>
           </CardContent>

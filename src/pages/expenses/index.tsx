@@ -4,6 +4,7 @@ import {
   CardContent,
   CardHeader,
   Container,
+  Grid,
   IconButton,
   List,
   TextField,
@@ -57,28 +58,32 @@ const Expenses: NextApplicationPage<React.FC> = () => {
           <CardHeader
             title="Despesas"
             action={
-              <>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <DatePicker
-                    views={["year", "month"]}
-                    label="Year and Month"
-                    value={selectedDate}
-                    onChange={(newValue) => {
-                      handleChangeDate(newValue);
-                    }}
-                    renderInput={(params) => (
-                      <TextField {...params} helperText={null} />
-                    )}
-                  />
-                </LocalizationProvider>
-                <Link href="/expenses/[pid]" as="/expenses/new">
-                  <a>
-                    <IconButton aria-label="addNew">
-                      <AddCircle />
-                    </IconButton>
-                  </a>
-                </Link>
-              </>
+              <Grid container spacing={2} flexDirection="row">
+                <Grid item>
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                      views={["year", "month"]}
+                      label="Year and Month"
+                      value={selectedDate}
+                      onChange={(newValue) => {
+                        handleChangeDate(newValue);
+                      }}
+                      renderInput={(params) => (
+                        <TextField {...params} helperText={null} />
+                      )}
+                    />
+                  </LocalizationProvider>
+                </Grid>
+                <Grid item>
+                  <Link href="/expenses/[pid]" as="/expenses/new">
+                    <a>
+                      <IconButton aria-label="addNew">
+                        <AddCircle fontSize="large" />
+                      </IconButton>
+                    </a>
+                  </Link>
+                </Grid>
+              </Grid>
             }
           />
           <CardContent>

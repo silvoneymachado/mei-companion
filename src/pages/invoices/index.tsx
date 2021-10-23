@@ -51,7 +51,7 @@ const Invoices: NextApplicationPage<React.FC> = () => {
               <Link href="/invoices/[pid]" as="/invoices/new">
                 <a>
                   <IconButton aria-label="addNew">
-                    <AddCircle />
+                    <AddCircle fontSize="large" />
                   </IconButton>
                 </a>
               </Link>

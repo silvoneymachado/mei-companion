@@ -40,7 +40,7 @@ export type User = {
    */
   
   export type Expense = {
-    id: number
+    id?: number
     userId: number
     name: string
     partnerId?: number

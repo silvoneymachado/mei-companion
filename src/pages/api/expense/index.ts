@@ -28,7 +28,6 @@ export default async function handler(
       const result = await prisma.expense.create({
         data: {
           ...expense,
-          id: Number(expense.id),
           value: Number(expense.value),
         },
       });

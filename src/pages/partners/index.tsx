@@ -51,7 +51,7 @@ const Partners: NextApplicationPage<React.FC> = () => {
               <Link href="/partners/[pid]" as="/partners/new">
                 <a>
                   <IconButton aria-label="addNew">
-                    <AddCircle />
+                    <AddCircle fontSize="large" />
                   </IconButton>
                 </a>
               </Link>
@@ -80,10 +80,10 @@ const Partners: NextApplicationPage<React.FC> = () => {
 
               {loading && (
                 <CustomListItem
-                primaryText=""
-                secondaryText="Aguarde..."
-                hideActions={true}
-              />
+                  primaryText=""
+                  secondaryText="Aguarde..."
+                  hideActions={true}
+                />
               )}
             </List>
           </CardContent>

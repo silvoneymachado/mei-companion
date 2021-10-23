@@ -33,10 +33,9 @@ const ExpenseProvider: React.FC = ({ children }) => {
   const { user } = useAuth();
   const [expenses, setExpenses] = useState<Expense[] | null>(null);
   const [loadedExpense, setLoadedExpense] = useState({
-    id: undefined,
     userId: user.id,
     name: '',
-    partnerId: null,
+    partnerId: 0,
     value: '',
     notes: '',
     paymentDate: new Date(),
