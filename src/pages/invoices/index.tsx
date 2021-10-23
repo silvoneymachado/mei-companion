@@ -4,8 +4,10 @@ import {
   CardContent,
   CardHeader,
   Container,
+  Grid,
   IconButton,
   List,
+  TextField,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
@@ -15,21 +17,25 @@ import { NextApplicationPage } from "../../types/types";
 import Dialog from "../../components/dialog";
 import { useRouter } from "next/router";
 import { useInvoice } from "../../contexts/invoiceContext";
+import { LocalizationProvider, DatePicker } from "@mui/lab";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
 
 const Invoices: NextApplicationPage<React.FC> = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [itemId, setItemId] = useState(null);
   const router = useRouter();
-  const { invoices, getAll, remove, loading } = useInvoice();
+  const { invoices, getByDate, remove, loading } = useInvoice();
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
 
   useEffect(() => {
-    getAll();
+    getByDate(selectedDate);
   }, []);
 
   const confirmDelete = () => {
     remove(itemId);
     setIsModalOpen(false);
-    getAll();
+    getByDate(selectedDate);
   };
 
   const handleDelete = (id: number) => {
@@ -41,6 +47,12 @@ const Invoices: NextApplicationPage<React.FC> = () => {
     router.push(`/invoices/${id}`);
   };
 
+
+  const handleChangeDate = (date: Date) => {
+    setSelectedDate(date);
+    getByDate(date);
+  };
+
   return (
     <Layout>
       <Card sx={{ display: "flex" }}>
@@ -48,13 +60,32 @@ const Invoices: NextApplicationPage<React.FC> = () => {
           <CardHeader
             title="Lançamentos"
             action={
-              <Link href="/invoices/[pid]" as="/invoices/new">
+              <Grid container spacing={2} flexDirection="row">
+                <Grid item>
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                      views={["year", "month"]}
+                      label="Year and Month"
+                      value={selectedDate}
+                      onChange={(newValue) => {
+                        handleChangeDate(newValue);
+                      }}
+                      renderInput={(params) => (
+                        <TextField {...params} helperText={null} />
+                      )}
+                    />
+                  </LocalizationProvider>
+                </Grid>
+                <Grid item>
+                <Link href="/invoices/[pid]" as="/invoices/new">
                 <a>
                   <IconButton aria-label="addNew">
                     <AddCircle fontSize="large" />
                   </IconButton>
                 </a>
               </Link>
+                </Grid>
+              </Grid>
             }
           />
           <CardContent>

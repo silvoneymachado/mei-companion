@@ -1,3 +1,4 @@
+import { getDateMonthRange } from "../../util/commonFn";
 import { Invoice } from "../../util/models";
 import { api } from "../api";
 
@@ -38,6 +39,20 @@ export function getAllInvoices(): Promise<Invoice[]> {
     }
   });
 }
+
+export function getInvoiceByDate(date: Date): Promise<Invoice[]> {
+  return new Promise((resolve, reject) => {
+    const { startDate, endDate } = getDateMonthRange(date);
+    try {
+      api.get<Invoice[]>(`${basePath}range/startDate/${startDate}/endDate/${endDate}`).then((res) => {
+        resolve(res.data);
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
 
 export function getInvoiceById(id: number): Promise<Invoice> {
   return new Promise((resolve, reject) => {

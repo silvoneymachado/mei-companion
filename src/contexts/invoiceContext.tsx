@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState } from "react";
 import {
   addInvoice,
   getAllInvoices,
+  getInvoiceByDate,
   getInvoiceById,
   removeInvoice,
   updateInvoice,
@@ -21,6 +22,7 @@ type InvoiceContextType = {
   remove: (id: number) => void;
   getById: (id: number) => void;
   getAll: () => void;
+  getByDate: (date: Date) => void;
 };
 
 export const InvoiceContext = createContext({} as InvoiceContextType);
@@ -139,6 +141,22 @@ const InvoiceProvider: React.FC = ({ children }) => {
     setLoading(false);
   }
 
+  async function getByDate(date: Date) {
+    setLoading(true);
+
+    try {
+      const response = await getInvoiceByDate(date);
+      setInvoices(response);
+    } catch (error) {
+      showAlert({
+        text: `${error.response.data.statusText}`,
+        severity: Severity.ERROR,
+      });
+    }
+
+    setLoading(false);
+  }
+
   return (
     <InvoiceContext.Provider
       value={{
@@ -150,6 +168,7 @@ const InvoiceProvider: React.FC = ({ children }) => {
         remove,
         getById,
         getAll,
+        getByDate,
       }}
     >
       {children}
