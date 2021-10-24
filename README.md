@@ -12,9 +12,9 @@
 - Cadastrar parceiros
 - Cadastrar Notas emitidas
 - Cadastrar categorias de despesas
+- Cadastrar despesas
 
 ### O que não é possível ainda (Funcionalidades futuras)
-- Cadastrar despesas
 - Cadastrar opções e limites
 - Visualizar gráficos
 
