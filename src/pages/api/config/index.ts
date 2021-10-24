@@ -25,15 +25,15 @@ export default async function handler(
 
   async function addItem(config: any) {
     try {
-      const configByCNPJ = await prisma.config.findFirst({
+      const configByName = await prisma.config.findFirst({
         where: { name: config.name },
       });
 
-      if (configByCNPJ) {
+      if (configByName) {
         res.status(409).json({
           ok: false,
           status: 409,
-          statusText: "Já existe um parceiro cadastrado com o CNPJ informado",
+          statusText: "Já existe uma configuração cadastrada com o nome informado",
         });
       } else {
         const result = await prisma.config.create({

@@ -42,7 +42,6 @@ export default async function handler(
 
   async function getByRangeDate(startDate: string, endDate: string) {
     try {
-      console.log(startDate, endDate);
       const result = await prisma.invoice.findMany({
         where: {
           AND: [
