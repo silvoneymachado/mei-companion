@@ -64,13 +64,14 @@ const Configs: NextApplicationPage<React.FC> = () => {
                 onDelete={handleDelete}
                 onEdit={handleEdit}
                 id={config.id}
+                hideDeleteAction
               />
             ))}
             {(configs?.length === 0 || !configs) && !loading && (
               <CustomListItem
                 primaryText=""
                 secondaryText="Adicione uma categoria clicando no botão +"
-                hideActions={true}
+                hideActions
               />
             )}
 
@@ -78,7 +79,7 @@ const Configs: NextApplicationPage<React.FC> = () => {
               <CustomListItem
                 primaryText=""
                 secondaryText="Aguarde..."
-                hideActions={true}
+                hideActions
               />
             )}
           </List>

@@ -67,7 +67,7 @@ const Partners: NextApplicationPage<React.FC> = () => {
               <CustomListItem
                 primaryText=""
                 secondaryText="Adicione um parceiro clicando no botão +"
-                hideActions={true}
+                hideActions
               />
             )}
 
@@ -75,7 +75,7 @@ const Partners: NextApplicationPage<React.FC> = () => {
               <CustomListItem
                 primaryText=""
                 secondaryText="Aguarde..."
-                hideActions={true}
+                hideActions
               />
             )}
           </List>

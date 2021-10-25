@@ -67,7 +67,7 @@ const Categories: NextApplicationPage<React.FC> = () => {
               <CustomListItem
                 primaryText=""
                 secondaryText="Adicione uma categoria clicando no botão +"
-                hideActions={true}
+                hideActions
               />
             )}
 
@@ -75,7 +75,7 @@ const Categories: NextApplicationPage<React.FC> = () => {
               <CustomListItem
                 primaryText=""
                 secondaryText="Aguarde..."
-                hideActions={true}
+                hideActions
               />
             )}
           </List>

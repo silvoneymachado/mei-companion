@@ -110,7 +110,7 @@ const Expenses: NextApplicationPage<React.FC> = () => {
               <CustomListItem
                 primaryText=""
                 secondaryText="Registre uma nova despesa clicando no botão +"
-                hideActions={true}
+                hideActions
               />
             )}
 
@@ -118,7 +118,7 @@ const Expenses: NextApplicationPage<React.FC> = () => {
               <CustomListItem
                 primaryText=""
                 secondaryText="Aguarde..."
-                hideActions={true}
+                hideActions
               />
             )}
           </List>

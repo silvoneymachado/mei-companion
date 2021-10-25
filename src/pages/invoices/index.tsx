@@ -108,7 +108,7 @@ const Invoices: NextApplicationPage<React.FC> = () => {
               <CustomListItem
                 primaryText=""
                 secondaryText="Registre uma nova nota fiscal clicando no botão +"
-                hideActions={true}
+                hideActions
               />
             )}
 
@@ -116,7 +116,7 @@ const Invoices: NextApplicationPage<React.FC> = () => {
               <CustomListItem
                 primaryText=""
                 secondaryText="Aguarde..."
-                hideActions={true}
+                hideActions
               />
             )}
           </List>

@@ -17,6 +17,8 @@ interface Props {
   secondaryText: string;
   description?: string;
   hideActions?: boolean;
+  hideDeleteAction?: boolean;
+  hideEditAction?: boolean;
   onDelete?: (id: number) => void;
   onEdit?: (id: number) => void;
   id?: number;
@@ -28,6 +30,8 @@ const CustomListItem: React.FC<Props> = (props: Props) => {
     secondaryText,
     description,
     hideActions,
+    hideDeleteAction,
+    hideEditAction,
     onDelete,
     onEdit,
     id,
@@ -62,7 +66,7 @@ const CustomListItem: React.FC<Props> = (props: Props) => {
           }
         />
       </ListItem>
-      {!hideActions && (
+      {(!hideActions) && (
         <>
           <CardActions
             sx={{
@@ -88,16 +92,16 @@ const CustomListItem: React.FC<Props> = (props: Props) => {
               sx={{ display: "flex", justifyContent: "flex-end" }}
               disableSpacing
             >
-              <Button startIcon={<Edit />} onClick={() => onEdit(id)}>
+              {!hideEditAction && (<Button startIcon={<Edit />} onClick={() => onEdit(id)}>
                 Editar
-              </Button>
-              <Button
+              </Button>)}
+              {!hideDeleteAction && (<Button
                 color="error"
                 startIcon={<Delete />}
                 onClick={() => onDelete(id)}
               >
                 Excluir
-              </Button>
+              </Button>)}
             </CardActions>
           </Collapse>
         </>

@@ -92,7 +92,7 @@ const Details: NextApplicationPage<React.FC> = () => {
             {({ values, errors, touched }) => (
               <Form>
                 <Grid container direction="row" spacing={2}>
-                  <Grid item xs>
+                  <Grid item sm>
                     <Field
                       as={TextField}
                       fullWidth
@@ -119,7 +119,7 @@ const Details: NextApplicationPage<React.FC> = () => {
                       }
                     />
                   </Grid>
-                  <Grid item xs>
+                  <Grid item xl>
                     <Field
                       as={FormControlLabel}
                       label="Ativo"
