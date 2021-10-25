@@ -43,7 +43,7 @@ const Details: NextApplicationPage<React.FC> = () => {
 
   const formikInitialValues: Invoice = {
     id: getId(),
-    userId: loadedUser.id,
+    userId: loadedUser?.id,
     partnerId: null,
     invoiceNumber: "",
     value: "",
@@ -94,7 +94,7 @@ const Details: NextApplicationPage<React.FC> = () => {
   const handleSubmit = (values: Invoice) => {
     const data = {
       ...values,
-      userId: loadedUser.id,
+      userId: loadedUser?.id,
     };
     if (data.id && data.userId) {
       update(data);

@@ -21,12 +21,10 @@ import {
   Theme,
   Tooltip,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 
 import MuiDrawer from "@mui/material/Drawer";
 import { useRouter } from "next/router";
-import { useAuth } from "../contexts/authContext";
-import Dialog from "./dialog";
 
 interface DrawerProps {
   isDrawerOpen: boolean;

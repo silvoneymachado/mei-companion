@@ -34,7 +34,7 @@ const Details: NextApplicationPage<React.FC> = () => {
 
   const formikInitialValues: Partner = {
     id: getId(),
-    userId: loadedUser.id,
+    userId: loadedUser?.id,
     name: "",
     cnpj: "",
     corporateName: "",
@@ -74,7 +74,7 @@ const Details: NextApplicationPage<React.FC> = () => {
   const handleSubmit = (values: Partner) => {
     const data = {
       ...values,
-      userId: loadedUser.id,
+      userId: loadedUser?.id,
     };
     if (data.id && data.userId) {
       update(data);

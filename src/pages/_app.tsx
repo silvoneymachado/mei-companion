@@ -27,8 +27,8 @@ const App = (props: AppProps) => {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <AlertProvider>
+    <AlertProvider>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         <AuthProvider>
           {Component.auth ? (
@@ -42,8 +42,8 @@ const App = (props: AppProps) => {
             <Component {...pageProps} />
           )}
         </AuthProvider>
-      </AlertProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </AlertProvider>
   );
 };
 

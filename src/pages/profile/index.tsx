@@ -6,34 +6,47 @@ import {
   TextField,
   CardActions,
   Button,
+  IconButton,
+  InputAdornment,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
 import { Form, Formik, Field, FormikProps } from "formik";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout";
 import { NextApplicationPage } from "../../types/types";
 import { User } from "../../util/models";
 import * as Yup from "yup";
 import { formatCNPJ, formatPhoneNumber } from "../../util/masks";
 import { useUser } from "../../contexts/userContext";
+import { VisibilityOff, Visibility } from "@mui/icons-material";
+
+interface PropAdapter {
+  willChangePass: boolean;
+}
 
 const Details: NextApplicationPage<React.FC> = () => {
   const router = useRouter();
-  const { update, loadedUser } = useUser();
-  let formikRef: FormikProps<User>;
+  const { update, loadedUser, changeUserPass } = useUser();
+  const [showPassword, setShowPassword] = useState(false);
 
-  const formikInitialValues: User = {
+  let formikRef: FormikProps<User & PropAdapter>;
+
+  const formikInitialValues: User & PropAdapter = {
     id: null,
     name: "",
     cnpj: "",
     corporateName: "",
     email: "",
     phoneNumber: "",
+    password: "",
+    willChangePass: false,
   };
 
   useEffect(() => {
-    if (loadedUser) {
-      formikRef.setValues(loadedUser);
+    if (loadedUser && loadedUser?.id) {
+      formikRef.setValues({ ...loadedUser, willChangePass: false });
     }
   }, [loadedUser]);
 
@@ -50,15 +63,31 @@ const Details: NextApplicationPage<React.FC> = () => {
       14,
       "O telefone não pode ultrapassar 11 digitos"
     ),
-    password: Yup.string().required(requiredMessage),
+    password: Yup.string().when("willChangePass", {
+      is: (value) => value === true,
+      then: Yup.string().required(requiredMessage),
+    }),
   });
 
   const handleCancel = () => {
     router.back();
   };
 
-  const handleSubmit = (values: User) => {
+  const handleSubmit = (values: User & PropAdapter) => {
     update(values);
+    if (values.willChangePass) {
+      changeUserPass(values);
+    }
+  };
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -91,7 +120,7 @@ const Details: NextApplicationPage<React.FC> = () => {
                   <Grid item sm>
                     <Field
                       as={TextField}
-                      value={formatCNPJ(values.cnpj).toString()}
+                      value={formatCNPJ(values.cnpj)?.toString()}
                       fullWidth
                       label="CNPJ"
                       name="cnpj"
@@ -105,7 +134,7 @@ const Details: NextApplicationPage<React.FC> = () => {
                   <Grid item sm>
                     <Field
                       as={TextField}
-                      value={formatPhoneNumber(values.phoneNumber).toString()}
+                      value={formatPhoneNumber(values.phoneNumber)?.toString()}
                       fullWidth
                       label="Telefone"
                       name="phoneNumber"
@@ -149,7 +178,58 @@ const Details: NextApplicationPage<React.FC> = () => {
                       }
                     />
                   </Grid>
+                  <Grid item sm>
+                    <Field
+                      as={FormControlLabel}
+                      label="Alterar senha?"
+                      control={
+                        <Switch
+                          name="willChangePass"
+                          value={values.willChangePass}
+                          checked={values.willChangePass}
+                        />
+                      }
+                    />
+                  </Grid>
                 </Grid>
+                {values.willChangePass && (
+                  <Grid container direction="row" spacing={2} marginTop={2}>
+                    <Grid item sm={4}>
+                      <Field
+                        as={TextField}
+                        value={values.password}
+                        fullWidth
+                        label="Senha"
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                              >
+                                {showPassword ? (
+                                  <VisibilityOff />
+                                ) : (
+                                  <Visibility />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                        error={errors.password && touched.password}
+                        helperText={
+                          errors.password && touched.password
+                            ? errors.password
+                            : null
+                        }
+                      />
+                    </Grid>
+                  </Grid>
+                )}
                 <CardActions
                   sx={{ display: "flex", justifyContent: "flex-end" }}
                 >

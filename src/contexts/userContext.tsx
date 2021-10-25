@@ -40,13 +40,10 @@ const UserProvider: React.FC = ({ children }) => {
 
     try {
       const response = await updateUser(user);
-      if (response) {
-        showAlert({
-          text: "Atualizado com sucesso",
-          severity: Severity.SUCCESS,
-        });
-        router.back();
-      }
+      showAlert({
+        text: "Atualizado com sucesso",
+        severity: Severity.SUCCESS,
+      });
     } catch (error) {
       showAlert({
         text: `${error.response.data.statusText}`,

@@ -33,7 +33,7 @@ const Details: NextApplicationPage<React.FC> = () => {
 
   const formikInitialValues: Config = {
     id: getId(),
-    userId: loadedUser.id,
+    userId: loadedUser?.id,
     name: "",
     value: 0,
     active: true,
@@ -67,7 +67,7 @@ const Details: NextApplicationPage<React.FC> = () => {
   const handleSubmit = (values: Config) => {
     const data = {
       ...values,
-      userId: loadedUser.id,
+      userId: loadedUser?.id,
     };
 
     if (data.id && data.userId) {
@@ -133,7 +133,6 @@ const Details: NextApplicationPage<React.FC> = () => {
                           checked={values.active}
                         />
                       }
-                      inputProps={{ maxLength: 18, inputMode: "numeric" }}
                     />
                   </Grid>
                 </Grid>

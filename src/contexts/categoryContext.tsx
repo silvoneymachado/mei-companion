@@ -41,14 +41,12 @@ const CategoryProvider: React.FC = ({ children }) => {
     setLoading(true);
 
     try {
-      const response = await addCategory(category);
-      if (response) {
-        showAlert({
-          text: "Cadastrado com sucesso",
-          severity: Severity.SUCCESS,
-        });
-        router.back();
-      }
+      await addCategory(category);
+      showAlert({
+        text: "Cadastrado com sucesso",
+        severity: Severity.SUCCESS,
+      });
+      router.back();
     } catch (error) {
       showAlert({
         text: `${error.response.data.statusText}`,
@@ -63,14 +61,12 @@ const CategoryProvider: React.FC = ({ children }) => {
     setLoading(true);
 
     try {
-      const response = await updateCategory(category);
-      if (response) {
-        showAlert({
-          text: "Atualizado com sucesso",
-          severity: Severity.SUCCESS,
-        });
-        router.back();
-      }
+      await updateCategory(category);
+      showAlert({
+        text: "Atualizado com sucesso",
+        severity: Severity.SUCCESS,
+      });
+      router.back();
     } catch (error) {
       showAlert({
         text: `${error.response.data.statusText}`,
@@ -85,14 +81,12 @@ const CategoryProvider: React.FC = ({ children }) => {
     setLoading(true);
 
     try {
-      const response = await removeCategory(id);
-      if (response) {
-        showAlert({
-          text: "Excluido com sucesso",
-          severity: Severity.SUCCESS,
-        });
-        getAll();
-      }
+      await removeCategory(id);
+      showAlert({
+        text: "Excluido com sucesso",
+        severity: Severity.SUCCESS,
+      });
+      getAll();
     } catch (error) {
       showAlert({
         text: `${error.response.data.statusText}`,

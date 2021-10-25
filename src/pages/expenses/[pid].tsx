@@ -45,7 +45,7 @@ const Details: NextApplicationPage<React.FC> = () => {
       : parseInt(String(pid));
 
   const formikInitialValues: Expense = {
-    userId: loadedUser.id,
+    userId: loadedUser?.id,
     name: "",
     partnerId: 0,
     value: "",
@@ -103,17 +103,17 @@ const Details: NextApplicationPage<React.FC> = () => {
 
   const handleSubmit = (values: Expense) => {
     const id = getId();
-    if (id && loadedUser.id) {
+    if (id && loadedUser?.id) {
       const data = {
         ...values,
         id: id,
-        userId: loadedUser.id,
+        userId: loadedUser?.id,
       };
       update(data);
     } else {
       const data = {
         ...values,
-        userId: loadedUser.id,
+        userId: loadedUser?.id,
       };
       create(data);
     }

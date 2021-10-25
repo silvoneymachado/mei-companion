@@ -16,6 +16,7 @@ const AlertComponent: React.FC = () => {
             position: "absolute",
             zIndex: 9999,
             paddingX: 30,
+            paddingTop: 30,
           }}
           spacing={2}
         >

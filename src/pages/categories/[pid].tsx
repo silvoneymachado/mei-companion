@@ -35,7 +35,7 @@ const Details: NextApplicationPage<React.FC> = () => {
 
   const formikInitialValues: Category = {
     id: getId(),
-    userId: loadedUser.id,
+    userId: loadedUser?.id,
     name: "",
     description: "",
     active: true,
@@ -69,7 +69,7 @@ const Details: NextApplicationPage<React.FC> = () => {
   const handleSubmit = (values: Category) => {
     const data = {
       ...values,
-      userId: loadedUser.id,
+      userId: loadedUser?.id,
     };
 
     if (data.id && data.userId) {
