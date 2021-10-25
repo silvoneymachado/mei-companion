@@ -1,12 +1,5 @@
 import { AddCircle } from "@mui/icons-material";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Container,
-  IconButton,
-  List,
-} from "@mui/material";
+import { Card, CardHeader, Container, IconButton, List } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import CustomListItem from "../../components/customListItem";
@@ -57,36 +50,35 @@ const Categories: NextApplicationPage<React.FC> = () => {
               </Link>
             }
           />
-          <CardContent>
-            <List>
-              {categories?.map((category, index) => (
-                <CustomListItem
-                  key={index}
-                  primaryText={category.name}
-                  secondaryText={category.description}
-                  description={category.active ? "Ativo" : "Inativo"}
-                  onDelete={handleDelete}
-                  onEdit={handleEdit}
-                  id={category.id}
-                />
-              ))}
-              {(categories?.length === 0 || !categories) && !loading && (
-                <CustomListItem
-                  primaryText=""
-                  secondaryText="Adicione uma categoria clicando no botão à sua direita"
-                  hideActions={true}
-                />
-              )}
 
-              {loading && (
-                <CustomListItem
-                  primaryText=""
-                  secondaryText="Aguarde..."
-                  hideActions={true}
-                />
-              )}
-            </List>
-          </CardContent>
+          <List>
+            {categories?.map((category, index) => (
+              <CustomListItem
+                key={index}
+                primaryText={category.name}
+                secondaryText={category.description}
+                description={category.active ? "Ativo" : "Inativo"}
+                onDelete={handleDelete}
+                onEdit={handleEdit}
+                id={category.id}
+              />
+            ))}
+            {(categories?.length === 0 || !categories) && !loading && (
+              <CustomListItem
+                primaryText=""
+                secondaryText="Adicione uma categoria clicando no botão +"
+                hideActions={true}
+              />
+            )}
+
+            {loading && (
+              <CustomListItem
+                primaryText=""
+                secondaryText="Aguarde..."
+                hideActions={true}
+              />
+            )}
+          </List>
         </Container>
       </Card>
       <Dialog

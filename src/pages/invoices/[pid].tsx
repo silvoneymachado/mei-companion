@@ -9,7 +9,6 @@ import {
   Button,
   Autocomplete,
   TextFieldProps,
-  CardContent,
 } from "@mui/material";
 import { Form, Formik, Field, FormikProps } from "formik";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
@@ -47,7 +46,7 @@ const Details: NextApplicationPage<React.FC> = () => {
     userId: user.id,
     partnerId: null,
     invoiceNumber: "",
-    value: '',
+    value: "",
     paymentDate: new Date(),
     referenceDate: new Date(),
     notes: "",
@@ -100,7 +99,7 @@ const Details: NextApplicationPage<React.FC> = () => {
   };
 
   const defaultProps = {
-    options: partners,
+    options: partners ?? [],
     getOptionLabel: (partner: Partner) =>
       `${partner.corporateName} - [${partner.cnpj}]`,
   };
@@ -119,7 +118,7 @@ const Details: NextApplicationPage<React.FC> = () => {
               getId() ? "Editar nota fiscal" : "Adicionar nova nota fiscal"
             }
           />
-          <CardContent>
+
             <Formik
               innerRef={(p) => (formikRef = p)}
               initialValues={formikInitialValues}
@@ -134,7 +133,6 @@ const Details: NextApplicationPage<React.FC> = () => {
                         <Field
                           as={Autocomplete}
                           fullWidth
-                          clear
                           onChange={(_e: any, newValue: Partner) =>
                             handleSelectPartner(newValue)
                           }
@@ -142,13 +140,18 @@ const Details: NextApplicationPage<React.FC> = () => {
                           {...defaultProps}
                           renderInput={(
                             params: JSX.IntrinsicAttributes & TextFieldProps
-                          ) => <TextField {...params} label="Parceiro" />}
-                          error={errors.partnerId && touched.partnerId}
-                          helperText={
-                            errors.partnerId && touched.partnerId
-                              ? errors.partnerId
-                              : null
-                          }
+                          ) => (
+                            <TextField
+                              {...params}
+                              label="Parceiro"
+                              error={errors.partnerId && touched.partnerId}
+                              helperText={
+                                errors.partnerId && touched.partnerId
+                                  ? errors.partnerId
+                                  : null
+                              }
+                            />
+                          )}
                         />
                       </Grid>
                       <Grid item sm>
@@ -253,7 +256,7 @@ const Details: NextApplicationPage<React.FC> = () => {
                 </Form>
               )}
             </Formik>
-          </CardContent>
+
         </Container>
       </Card>
     </Layout>

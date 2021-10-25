@@ -1,7 +1,6 @@
 import { AddCircle } from "@mui/icons-material";
 import {
   Card,
-  CardContent,
   CardHeader,
   Container,
   Grid,
@@ -27,7 +26,6 @@ const Invoices: NextApplicationPage<React.FC> = () => {
   const { invoices, getByDate, remove, loading } = useInvoice();
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-
   useEffect(() => {
     getByDate(selectedDate);
   }, []);
@@ -47,7 +45,6 @@ const Invoices: NextApplicationPage<React.FC> = () => {
     router.push(`/invoices/${id}`);
   };
 
-
   const handleChangeDate = (date: Date) => {
     setSelectedDate(date);
     getByDate(date);
@@ -57,11 +54,13 @@ const Invoices: NextApplicationPage<React.FC> = () => {
     <Layout>
       <Card sx={{ display: "flex" }}>
         <Container maxWidth="lg">
-          <CardHeader
-            title="Lançamentos"
-            action={
+          <Grid container spacing={2}>
+            <Grid item flexGrow={1}>
+              <CardHeader title="Lançamentos" />
+            </Grid>
+            <Grid item>
               <Grid container spacing={2} flexDirection="row">
-                <Grid item>
+                <Grid item marginTop={0.5}>
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                       views={["year", "month"]}
@@ -78,50 +77,49 @@ const Invoices: NextApplicationPage<React.FC> = () => {
                   </LocalizationProvider>
                 </Grid>
                 <Grid item>
-                <Link href="/invoices/[pid]" as="/invoices/new">
-                <a>
-                  <IconButton aria-label="addNew">
-                    <AddCircle fontSize="large" />
-                  </IconButton>
-                </a>
-              </Link>
+                  <Link href="/invoices/[pid]" as="/invoices/new">
+                    <a>
+                      <IconButton aria-label="addNew">
+                        <AddCircle fontSize="large" />
+                      </IconButton>
+                    </a>
+                  </Link>
                 </Grid>
               </Grid>
-            }
-          />
-          <CardContent>
-            <List>
-              {invoices?.map((invoice, index) => (
-                <CustomListItem
-                  key={index}
-                  primaryText={invoice.notes}
-                  secondaryText={new Intl.NumberFormat("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  }).format(parseFloat(invoice.value))}
-                  description={String(invoice.invoiceNumber)}
-                  onDelete={handleDelete}
-                  onEdit={handleEdit}
-                  id={invoice.id}
-                />
-              ))}
-              {(invoices?.length === 0 || !invoices) && !loading && (
-                <CustomListItem
-                  primaryText=""
-                  secondaryText="Registre uma nova nota fiscal clicando no botão à sua direita"
-                  hideActions={true}
-                />
-              )}
+            </Grid>
+          </Grid>
 
-              {loading && (
-                <CustomListItem
-                  primaryText=""
-                  secondaryText="Aguarde..."
-                  hideActions={true}
-                />
-              )}
-            </List>
-          </CardContent>
+          <List>
+            {invoices?.map((invoice, index) => (
+              <CustomListItem
+                key={index}
+                primaryText={invoice.notes}
+                secondaryText={new Intl.NumberFormat("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                }).format(parseFloat(invoice.value))}
+                description={String(invoice.invoiceNumber)}
+                onDelete={handleDelete}
+                onEdit={handleEdit}
+                id={invoice.id}
+              />
+            ))}
+            {(invoices?.length === 0 || !invoices) && !loading && (
+              <CustomListItem
+                primaryText=""
+                secondaryText="Registre uma nova nota fiscal clicando no botão +"
+                hideActions={true}
+              />
+            )}
+
+            {loading && (
+              <CustomListItem
+                primaryText=""
+                secondaryText="Aguarde..."
+                hideActions={true}
+              />
+            )}
+          </List>
         </Container>
       </Card>
       <Dialog

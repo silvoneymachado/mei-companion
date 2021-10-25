@@ -1,7 +1,6 @@
 import { AddCircle } from "@mui/icons-material";
 import {
   Card,
-  CardContent,
   CardHeader,
   Container,
   Grid,
@@ -55,11 +54,13 @@ const Expenses: NextApplicationPage<React.FC> = () => {
     <Layout>
       <Card sx={{ display: "flex" }}>
         <Container maxWidth="lg">
-          <CardHeader
-            title="Despesas"
-            action={
+          <Grid container spacing={2}>
+            <Grid item flexGrow={1}>
+              <CardHeader title="Despesas" />
+            </Grid>
+            <Grid item>
               <Grid container spacing={2} flexDirection="row">
-                <Grid item>
+                <Grid item marginTop={0.5}>
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                       views={["year", "month"]}
@@ -85,43 +86,42 @@ const Expenses: NextApplicationPage<React.FC> = () => {
                   </Link>
                 </Grid>
               </Grid>
-            }
-          />
-          <CardContent>
-            <List>
-              {expenses?.map((expense, index) => (
-                <CustomListItem
-                  key={index}
-                  primaryText={expense.notes}
-                  secondaryText={new Intl.NumberFormat("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  }).format(Number(expense.value))}
-                  description={new Intl.DateTimeFormat("pt-BR").format(
-                    new Date(expense.paymentDate)
-                  )}
-                  onDelete={handleDelete}
-                  onEdit={handleEdit}
-                  id={expense.id}
-                />
-              ))}
-              {(expenses?.length === 0 || !expenses) && !loading && (
-                <CustomListItem
-                  primaryText=""
-                  secondaryText="Registre uma nova despesa clicando no botão à sua direita"
-                  hideActions={true}
-                />
-              )}
+            </Grid>
+          </Grid>
 
-              {loading && (
-                <CustomListItem
-                  primaryText=""
-                  secondaryText="Aguarde..."
-                  hideActions={true}
-                />
-              )}
-            </List>
-          </CardContent>
+          <List>
+            {expenses?.map((expense, index) => (
+              <CustomListItem
+                key={index}
+                primaryText={expense.notes}
+                secondaryText={new Intl.NumberFormat("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                }).format(Number(expense.value))}
+                description={new Intl.DateTimeFormat("pt-BR").format(
+                  new Date(expense.paymentDate)
+                )}
+                onDelete={handleDelete}
+                onEdit={handleEdit}
+                id={expense.id}
+              />
+            ))}
+            {(expenses?.length === 0 || !expenses) && !loading && (
+              <CustomListItem
+                primaryText=""
+                secondaryText="Registre uma nova despesa clicando no botão +"
+                hideActions={true}
+              />
+            )}
+
+            {loading && (
+              <CustomListItem
+                primaryText=""
+                secondaryText="Aguarde..."
+                hideActions={true}
+              />
+            )}
+          </List>
         </Container>
       </Card>
       <Dialog

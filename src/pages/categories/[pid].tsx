@@ -92,7 +92,7 @@ const Details: NextApplicationPage<React.FC> = () => {
             {({ values, errors, touched }) => (
               <Form>
                 <Grid container direction="row" spacing={2}>
-                  <Grid item xs>
+                  <Grid item sm>
                     <Field
                       as={TextField}
                       fullWidth
@@ -105,7 +105,7 @@ const Details: NextApplicationPage<React.FC> = () => {
                       }
                     />
                   </Grid>
-                  <Grid item xs>
+                  <Grid item sm>
                     <Field
                       as={TextField}
                       fullWidth
@@ -120,20 +120,22 @@ const Details: NextApplicationPage<React.FC> = () => {
                       }
                     />
                   </Grid>
-                  <Grid item xs>
+                  <Grid item xl>
                     <Field
                       as={FormControlLabel}
-                      fullWidth
                       label="Ativo"
-                      control={<Switch name="active" value={values.active} checked={values.active}/>}
-                      inputProps={{ maxLength: 18, inputMode: "numeric" }}
-                      error={errors.active && touched.active}
-                      helperText={
-                        errors.active && touched.active ? errors.active : null
+                      control={
+                        <Switch
+                          name="active"
+                          value={values.active}
+                          checked={values.active}
+                        />
                       }
+                      error={errors.active && touched.active}
                     />
                   </Grid>
                 </Grid>
+
                 <CardActions
                   sx={{ display: "flex", justifyContent: "flex-end" }}
                 >

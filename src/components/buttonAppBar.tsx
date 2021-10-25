@@ -9,7 +9,7 @@ import { Button, styled } from "@mui/material";
 import { useAuth } from "../contexts/authContext";
 import { useRouter } from "next/router";
 
-const drawerWidth = 240;
+const drawerWidth = 0;
 
 interface AppBarProps extends MuiAppBarProps {
   open: boolean;
@@ -63,7 +63,7 @@ const ButtonAppBar = (props: AppBarProps) => {
               edge="start"
               sx={{
                 marginRight: "36px",
-                ...(open && { display: "none" }),
+                // ...(open && { display: "none" }),
               }}
             >
               <MenuIcon />

@@ -1,12 +1,5 @@
 import { AddCircle } from "@mui/icons-material";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Container,
-  IconButton,
-  List,
-} from "@mui/material";
+import { Card, CardHeader, Container, IconButton, List } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import CustomListItem from "../../components/customListItem";
@@ -57,36 +50,35 @@ const Partners: NextApplicationPage<React.FC> = () => {
               </Link>
             }
           />
-          <CardContent>
-            <List>
-              {partners?.map((partner, index) => (
-                <CustomListItem
-                  key={index}
-                  primaryText={partner.corporateName}
-                  secondaryText={partner.name}
-                  description={partner.cnpj}
-                  onDelete={handleDelete}
-                  onEdit={handleEdit}
-                  id={partner.id}
-                />
-              ))}
-              {(partners?.length === 0 || !partners) && !loading && (
-                <CustomListItem
-                  primaryText=""
-                  secondaryText="Adicione um parceiro clicando no botão à sua direita"
-                  hideActions={true}
-                />
-              )}
 
-              {loading && (
-                <CustomListItem
-                  primaryText=""
-                  secondaryText="Aguarde..."
-                  hideActions={true}
-                />
-              )}
-            </List>
-          </CardContent>
+          <List>
+            {partners?.map((partner, index) => (
+              <CustomListItem
+                key={index}
+                primaryText={partner.corporateName}
+                secondaryText={partner.name}
+                description={partner.cnpj}
+                onDelete={handleDelete}
+                onEdit={handleEdit}
+                id={partner.id}
+              />
+            ))}
+            {(partners?.length === 0 || !partners) && !loading && (
+              <CustomListItem
+                primaryText=""
+                secondaryText="Adicione um parceiro clicando no botão +"
+                hideActions={true}
+              />
+            )}
+
+            {loading && (
+              <CustomListItem
+                primaryText=""
+                secondaryText="Aguarde..."
+                hideActions={true}
+              />
+            )}
+          </List>
         </Container>
       </Card>
       <Dialog

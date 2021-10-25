@@ -5,8 +5,7 @@ import {
   Grid,
   TextField,
   CardActions,
-  Button,
-  CardContent,
+  Button
 } from "@mui/material";
 import { Form, Formik, Field, FormikProps } from "formik";
 import { useRouter } from "next/router";
@@ -88,15 +87,14 @@ const Details: NextApplicationPage<React.FC> = () => {
           <CardHeader
             title={getId() ? "Editar parceiro" : "Adicionar novo parceiro"}
           />
-          <CardContent>
-            <Formik
-              innerRef={(p) => (formikRef = p)}
-              initialValues={formikInitialValues}
-              onSubmit={(values) => handleSubmit(values)}
-              validationSchema={SignUpValidationSchema}
-            >
-              {({ values, errors, touched }) => (
-                <Form>
+          <Formik
+            innerRef={(p) => (formikRef = p)}
+            initialValues={formikInitialValues}
+            onSubmit={(values) => handleSubmit(values)}
+            validationSchema={SignUpValidationSchema}
+          >
+            {({ values, errors, touched }) => (
+              <Form>
                   <Grid container direction="row" spacing={2}>
                     <Grid item xs>
                       <Field
@@ -111,7 +109,7 @@ const Details: NextApplicationPage<React.FC> = () => {
                         }
                       />
                     </Grid>
-                    <Grid item xs>
+                    <Grid item sm>
                       <Field
                         as={TextField}
                         fullWidth
@@ -126,7 +124,7 @@ const Details: NextApplicationPage<React.FC> = () => {
                         }
                       />
                     </Grid>
-                    <Grid item xs>
+                    <Grid item sm>
                       <Field
                         as={TextField}
                         value={
@@ -143,20 +141,19 @@ const Details: NextApplicationPage<React.FC> = () => {
                       />
                     </Grid>
                   </Grid>
-                  <CardActions
-                    sx={{ display: "flex", justifyContent: "flex-end" }}
-                  >
-                    <Button variant="outlined" onClick={handleCancel}>
-                      Cancelar
-                    </Button>
-                    <Button type="submit" variant="contained">
-                      {getId() ? "Atualizar" : "Salvar"}
-                    </Button>
-                  </CardActions>
-                </Form>
-              )}
-            </Formik>
-          </CardContent>
+                <CardActions
+                  sx={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <Button variant="outlined" onClick={handleCancel}>
+                    Cancelar
+                  </Button>
+                  <Button type="submit" variant="contained">
+                    {getId() ? "Atualizar" : "Salvar"}
+                  </Button>
+                </CardActions>
+              </Form>
+            )}
+          </Formik>
         </Container>
       </Card>
     </Layout>

@@ -9,7 +9,6 @@ import {
   Button,
   Autocomplete,
   TextFieldProps,
-  CardContent,
 } from "@mui/material";
 import { Form, Formik, Field, FormikProps } from "formik";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
@@ -72,7 +71,7 @@ const Details: NextApplicationPage<React.FC> = () => {
   }, [loadedExpense]);
 
   useEffect(() => {
-    if(partners && partners?.length > 0){
+    if (partners && partners?.length > 0) {
       setSelectedPartner(
         partners?.find((partner) => partner.id === loadedExpense.partnerId)
       );
@@ -80,11 +79,9 @@ const Details: NextApplicationPage<React.FC> = () => {
   }, [partners]);
 
   useEffect(() => {
-    if(categories && categories?.length > 0){
+    if (categories && categories?.length > 0) {
       setSelectedCategory(
-        categories?.find(
-          (category) => category.id === loadedExpense.categoryId
-        )
+        categories?.find((category) => category.id === loadedExpense.categoryId)
       );
     }
   }, [categories]);
@@ -123,12 +120,12 @@ const Details: NextApplicationPage<React.FC> = () => {
   };
 
   const categorySelectProps = {
-    options: categories?.filter((category) => category.active),
+    options: categories?.filter((category) => category.active) ?? [],
     getOptionLabel: (category: Category) => category.name,
   };
 
   const partnerSelectProps = {
-    options: partners,
+    options: partners ?? [],
     getOptionLabel: (partner: Partner) =>
       `${partner.corporateName} - [${partner.cnpj}]`,
   };
@@ -148,158 +145,163 @@ const Details: NextApplicationPage<React.FC> = () => {
       <Card sx={{ display: "flex" }}>
         <Container maxWidth="lg">
           <CardHeader
-            title={
-              getId() ? "Editar despesa" : "Adicionar nova despesa"
-            }
+            title={getId() ? "Editar despesa" : "Adicionar nova despesa"}
           />
-          <CardContent>
-            <Formik
-              innerRef={(p) => (formikRef = p)}
-              initialValues={formikInitialValues}
-              onSubmit={(values) => handleSubmit(values)}
-              validationSchema={SignUpValidationSchema}
-            >
-              {({ values, errors, touched, setFieldValue }) => (
-                <Form>
-                  <Grid container direction="column" spacing={2}>
-                    <Grid container direction="row" spacing={2}>
-                      <Grid item xs>
+
+          <Formik
+            innerRef={(p) => (formikRef = p)}
+            initialValues={formikInitialValues}
+            onSubmit={(values) => handleSubmit(values)}
+            validationSchema={SignUpValidationSchema}
+          >
+            {({ values, errors, touched, setFieldValue }) => (
+              <Form>
+                <Grid container direction="column" spacing={2}>
+                  <Grid container direction="row" spacing={2}>
+                    <Grid item xs>
+                      <Field
+                        as={Autocomplete}
+                        fullWidth
+                        onChange={(_e: any, newValue: Category) =>
+                          handleSelectCategory(newValue)
+                        }
+                        value={selectedCategory}
+                        {...categorySelectProps}
+                        renderInput={(
+                          params: JSX.IntrinsicAttributes & TextFieldProps
+                        ) => (
+                          <TextField
+                            {...params}
+                            label="Categoria"
+                            error={errors.categoryId && touched.categoryId}
+                            helperText={
+                              errors.categoryId && touched.categoryId
+                                ? errors.categoryId
+                                : null
+                            }
+                          />
+                        )}
+                      />
+                    </Grid>
+                    <Grid item sm>
+                      <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <Field
-                          as={Autocomplete}
-                          fullWidth
-                          clear
-                          onChange={(_e: any, newValue: Category) =>
-                            handleSelectCategory(newValue)
+                          as={MobileDatePicker}
+                          value={values.referenceDate}
+                          label="Data de competência"
+                          onChange={(newValue: Date) =>
+                            setFieldValue("referenceDate", newValue)
                           }
-                          value={selectedCategory}
-                          {...categorySelectProps}
                           renderInput={(
                             params: JSX.IntrinsicAttributes & TextFieldProps
-                          ) => <TextField {...params} label="Categoria" />}
-                          error={errors.categoryId && touched.categoryId}
-                          helperText={
-                            errors.categoryId && touched.categoryId
-                              ? errors.categoryId
-                              : null
-                          }
+                          ) => <TextField fullWidth {...params} />}
                         />
-                      </Grid>
-                      <Grid item sm>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                          <Field
-                            as={MobileDatePicker}
-                            value={values.referenceDate}
-                            label="Data de competência"
-                            onChange={(newValue: Date) =>
-                              setFieldValue("referenceDate", newValue)
-                            }
-                            renderInput={(
-                              params: JSX.IntrinsicAttributes & TextFieldProps
-                            ) => <TextField fullWidth {...params} />}
-                          />
-                        </LocalizationProvider>
-                      </Grid>
-                      <Grid item sm>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                          <Field
-                            as={MobileDatePicker}
-                            value={values.paymentDate}
-                            label="Data de recebimento"
-                            onChange={(newValue: Date) =>
-                              setFieldValue("paymentDate", newValue)
-                            }
-                            renderInput={(
-                              params: JSX.IntrinsicAttributes & TextFieldProps
-                            ) => <TextField fullWidth {...params} />}
-                          />
-                        </LocalizationProvider>
-                      </Grid>
+                      </LocalizationProvider>
                     </Grid>
-                    <Grid
-                      container
-                      direction="row"
-                      sx={{ marginTop: 2 }}
-                      spacing={2}
-                    >
-                      <Grid item sm>
+                    <Grid item sm>
+                      <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <Field
-                          as={TextField}
-                          fullWidth
-                          value={String(values.value)}
-                          label="Valor"
-                          name="value"
-                          inputProps={{ inputMode: "numeric" }}
-                          error={errors.value && touched.value}
-                          helperText={
-                            errors.value && touched.value ? errors.value : null
+                          as={MobileDatePicker}
+                          value={values.paymentDate}
+                          label="Data de recebimento"
+                          onChange={(newValue: Date) =>
+                            setFieldValue("paymentDate", newValue)
                           }
-                        />
-                      </Grid>
-                      <Grid item sm>
-                        <Field
-                          as={TextField}
-                          fullWidth
-                          value={values.name}
-                          label="Nome"
-                          name="name"
-                          error={errors.name && touched.name}
-                          helperText={
-                            errors.name && touched.name ? errors.name : null
-                          }
-                        />
-                      </Grid>
-                      <Grid item xs>
-                        <Field
-                          as={Autocomplete}
-                          fullWidth
-                          clear
-                          onChange={(_e: any, newValue: Partner) =>
-                            handleSelectPartner(newValue)
-                          }
-                          value={selectedPartner}
-                          {...partnerSelectProps}
                           renderInput={(
                             params: JSX.IntrinsicAttributes & TextFieldProps
-                          ) => <TextField {...params} label="Parceiro" />}
-                          error={errors.partnerId && touched.partnerId}
-                          helperText={
-                            errors.partnerId && touched.partnerId
-                              ? errors.partnerId
-                              : null
-                          }
+                          ) => <TextField fullWidth {...params} />}
                         />
-                      </Grid>
-                    </Grid>
-                    <Grid container direction="row" sx={{ marginTop: 2 }}>
-                      <Grid item sm>
-                        <Field
-                          as={TextField}
-                          fullWidth
-                          value={values.notes}
-                          label="Descrição"
-                          name="notes"
-                          error={errors.notes && touched.notes}
-                          helperText={
-                            errors.notes && touched.notes ? errors.notes : null
-                          }
-                        />
-                      </Grid>
+                      </LocalizationProvider>
                     </Grid>
                   </Grid>
-                  <CardActions
-                    sx={{ display: "flex", justifyContent: "flex-end" }}
+                  <Grid
+                    container
+                    direction="row"
+                    sx={{ marginTop: 2 }}
+                    spacing={2}
                   >
-                    <Button variant="outlined" onClick={handleCancel}>
-                      Cancelar
-                    </Button>
-                    <Button type="submit" variant="contained">
-                      {getId() ? "Atualizar" : "Salvar"}
-                    </Button>
-                  </CardActions>
-                </Form>
-              )}
-            </Formik>
-          </CardContent>
+                    <Grid item sm>
+                      <Field
+                        as={TextField}
+                        fullWidth
+                        value={String(values.value)}
+                        label="Valor"
+                        name="value"
+                        inputProps={{ inputMode: "numeric" }}
+                        error={errors.value && touched.value}
+                        helperText={
+                          errors.value && touched.value ? errors.value : null
+                        }
+                      />
+                    </Grid>
+                    <Grid item sm>
+                      <Field
+                        as={TextField}
+                        fullWidth
+                        value={values.name}
+                        label="Nome"
+                        name="name"
+                        error={errors.name && touched.name}
+                        helperText={
+                          errors.name && touched.name ? errors.name : null
+                        }
+                      />
+                    </Grid>
+                    <Grid item xs>
+                      <Field
+                        as={Autocomplete}
+                        fullWidth
+                        onChange={(_e: any, newValue: Partner) =>
+                          handleSelectPartner(newValue)
+                        }
+                        value={selectedPartner}
+                        {...partnerSelectProps}
+                        renderInput={(
+                          params: JSX.IntrinsicAttributes & TextFieldProps
+                        ) => (
+                          <TextField
+                            {...params}
+                            label="Parceiro"
+                            error={errors.partnerId && touched.partnerId}
+                            helperText={
+                              errors.partnerId && touched.partnerId
+                                ? errors.partnerId
+                                : null
+                            }
+                          />
+                        )}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid container direction="row" sx={{ marginTop: 2 }}>
+                    <Grid item sm>
+                      <Field
+                        as={TextField}
+                        fullWidth
+                        value={values.notes}
+                        label="Descrição"
+                        name="notes"
+                        error={errors.notes && touched.notes}
+                        helperText={
+                          errors.notes && touched.notes ? errors.notes : null
+                        }
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <CardActions
+                  sx={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <Button variant="outlined" onClick={handleCancel}>
+                    Cancelar
+                  </Button>
+                  <Button type="submit" variant="contained">
+                    {getId() ? "Atualizar" : "Salvar"}
+                  </Button>
+                </CardActions>
+              </Form>
+            )}
+          </Formik>
         </Container>
       </Card>
     </Layout>

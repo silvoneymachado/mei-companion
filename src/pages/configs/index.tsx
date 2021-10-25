@@ -1,12 +1,5 @@
 import { AddCircle } from "@mui/icons-material";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Container,
-  IconButton,
-  List,
-} from "@mui/material";
+import { Card, CardHeader, Container, IconButton, List } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import CustomListItem from "../../components/customListItem";
@@ -57,9 +50,9 @@ const Configs: NextApplicationPage<React.FC> = () => {
             //   </Link>
             // }
           />
-          <CardContent>
-            <List>
-              {/* {configs?.map((category, index) => (
+
+          <List>
+            {/* {configs?.map((category, index) => (
                 <CustomListItem
                   key={index}
                   primaryText={category.name}
@@ -70,23 +63,22 @@ const Configs: NextApplicationPage<React.FC> = () => {
                   id={category.id}
                 />
               ))} */}
-              {/* {(configs?.length === 0 || !configs) && !loading && (
+            {/* {(configs?.length === 0 || !configs) && !loading && (
                 <CustomListItem
                   primaryText=""
-                  secondaryText="Adicione uma categoria clicando no botão à sua direita"
+                  secondaryText="Adicione uma categoria clicando no botão +"
                   hideActions={true}
                 />
               )} */}
 
-              {/* {loading && (
+            {/* {loading && (
                 <CustomListItem
                   primaryText=""
                   secondaryText="Aguarde..."
                   hideActions={true}
                 />
               )} */}
-            </List>
-          </CardContent>
+          </List>
         </Container>
       </Card>
       {/* <Dialog

@@ -87,7 +87,15 @@ const AppDrawer: React.FC<DrawerProps> = (props: DrawerProps) => {
   };
 
   return (
-    <Drawer variant="permanent" open={isDrawerOpen}>
+    <Drawer
+      // container={window.document.body}
+      variant="permanent"
+      open={isDrawerOpen}
+      onClose={toggledrawer}
+      ModalProps={{
+        keepMounted: true, // Better open performance on mobile.
+      }}
+    >
       <DrawerHeader>
         <IconButton onClick={toggledrawer}>
           {!isDrawerOpen ? <ChevronRight /> : <ChevronLeft />}

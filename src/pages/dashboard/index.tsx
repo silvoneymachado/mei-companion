@@ -17,9 +17,13 @@ const Dashboard: NextApplicationPage<React.FC> = () => {
     <Layout>
       <Card sx={{ display: "flex" }}>
         <Container maxWidth="lg">
-          <CardHeader
-            title="DashBoard (Em desenvolvimento)"
-            action={
+          <Grid container spacing={2} >
+            <Grid item flexGrow={1}>
+              <CardHeader
+                title="DashBoard (Em desenvolvimento)"
+              />
+            </Grid>
+            <Grid item>
               <Grid container spacing={2} justifyContent="row">
                 <Grid item>
                   <Link href="/invoices/[pid]" as="/invoices/new">
@@ -36,8 +40,8 @@ const Dashboard: NextApplicationPage<React.FC> = () => {
                   </Link>
                 </Grid>
               </Grid>
-            }
-          />
+            </Grid>
+          </Grid>
           <CardContent></CardContent>
         </Container>
       </Card>
