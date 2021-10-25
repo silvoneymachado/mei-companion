@@ -136,7 +136,7 @@ const Details: NextApplicationPage<React.FC> = () => {
                   <Grid item sm>
                     <Field
                       as={TextField}
-                      value={formatCNPJ(values.cnpj)?.toString()}
+                      value={String(formatCNPJ(values.cnpj))}
                       fullWidth
                       label="CNPJ"
                       name="cnpj"
@@ -150,7 +150,7 @@ const Details: NextApplicationPage<React.FC> = () => {
                   <Grid item sm>
                     <Field
                       as={TextField}
-                      value={formatPhoneNumber(values.phoneNumber)?.toString()}
+                      value={String(formatPhoneNumber(values.phoneNumber))}
                       fullWidth
                       label="Telefone"
                       name="phoneNumber"
