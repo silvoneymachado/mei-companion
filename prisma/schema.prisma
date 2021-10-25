@@ -41,7 +41,6 @@ model Partner {
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
   invoices      Invoice[]
-  Expense       Expense[]
 }
 
 model Invoice {
@@ -62,7 +61,6 @@ model Expense {
   user          User      @relation(fields: [userId], references: [id])
   userId        Int
   partnerId     Int?
-  partner       Partner?  @relation(fields: [partnerId], references: [id])
   name          String
   value         Float
   notes         String
