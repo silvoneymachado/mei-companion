@@ -24,11 +24,11 @@ import { useExpense } from "../../contexts/expenseContext";
 import { usePartner } from "../../contexts/partnerContext";
 import { Partner } from ".prisma/client";
 import { useCategory } from "../../contexts/categoryContext";
-import { useUser } from "../../contexts/userContext";
+import { useAuth } from "../../contexts/authContext";
 
 const Details: NextApplicationPage<React.FC> = () => {
   const router = useRouter();
-  const { loadedUser } = useUser();
+  const { user} = useAuth();
   const { pid } = router.query;
   const { getById, create, update, loadedExpense } = useExpense();
   const { getAll: getAllPartners, partners } = usePartner();
@@ -45,7 +45,7 @@ const Details: NextApplicationPage<React.FC> = () => {
       : parseInt(String(pid));
 
   const formikInitialValues: Expense = {
-    userId: loadedUser?.id,
+    userId: user?.id,
     name: "",
     partnerId: 0,
     value: "",
@@ -103,17 +103,17 @@ const Details: NextApplicationPage<React.FC> = () => {
 
   const handleSubmit = (values: Expense) => {
     const id = getId();
-    if (id && loadedUser?.id) {
+    if (id && user?.id) {
       const data = {
         ...values,
         id: id,
-        userId: loadedUser?.id,
+        userId: user?.id,
       };
       update(data);
     } else {
       const data = {
         ...values,
-        userId: loadedUser?.id,
+        userId: user?.id,
       };
       create(data);
     }

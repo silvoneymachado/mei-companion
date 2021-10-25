@@ -17,11 +17,11 @@ import { NextApplicationPage } from "../../types/types";
 import { Config } from "../../util/models";
 import * as Yup from "yup";
 import { useConfig } from "../../contexts/configContext";
-import { useUser } from "../../contexts/userContext";
+import { useAuth } from "../../contexts/authContext";
 
 const Details: NextApplicationPage<React.FC> = () => {
   const router = useRouter();
-  const { loadedUser } = useUser();
+  const { user} = useAuth();
   const { pid } = router.query;
   const { getById, create, update, loadedConfig } = useConfig();
   let formikRef: FormikProps<Config>;
@@ -33,7 +33,7 @@ const Details: NextApplicationPage<React.FC> = () => {
 
   const formikInitialValues: Config = {
     id: getId(),
-    userId: loadedUser?.id,
+    userId: user?.id,
     name: "",
     value: 0,
     active: true,
@@ -67,7 +67,7 @@ const Details: NextApplicationPage<React.FC> = () => {
   const handleSubmit = (values: Config) => {
     const data = {
       ...values,
-      userId: loadedUser?.id,
+      userId: user?.id,
     };
 
     if (data.id && data.userId) {

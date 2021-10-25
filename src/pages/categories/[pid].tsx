@@ -17,11 +17,11 @@ import { NextApplicationPage } from "../../types/types";
 import { Category } from "../../util/models";
 import * as Yup from "yup";
 import { useCategory } from "../../contexts/categoryContext";
-import { useUser } from "../../contexts/userContext";
+import { useAuth } from "../../contexts/authContext";
 
 const Details: NextApplicationPage<React.FC> = () => {
   const router = useRouter();
-  const { loadedUser } = useUser();
+  const { user} = useAuth();
   const { pid } = router.query;
   const { getById, create, update, loadedCategory } = useCategory();
   let formikRef: FormikProps<Category>;
@@ -35,7 +35,7 @@ const Details: NextApplicationPage<React.FC> = () => {
 
   const formikInitialValues: Category = {
     id: getId(),
-    userId: loadedUser?.id,
+    userId: user?.id,
     name: "",
     description: "",
     active: true,
@@ -69,7 +69,7 @@ const Details: NextApplicationPage<React.FC> = () => {
   const handleSubmit = (values: Category) => {
     const data = {
       ...values,
-      userId: loadedUser?.id,
+      userId: user?.id,
     };
 
     if (data.id && data.userId) {

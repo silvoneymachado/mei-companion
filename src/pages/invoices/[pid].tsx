@@ -23,11 +23,11 @@ import * as Yup from "yup";
 import { useInvoice } from "../../contexts/invoiceContext";
 import { usePartner } from "../../contexts/partnerContext";
 import { Partner } from ".prisma/client";
-import { useUser } from "../../contexts/userContext";
+import { useAuth } from "../../contexts/authContext";
 
 const Details: NextApplicationPage<React.FC> = () => {
   const router = useRouter();
-  const { loadedUser } = useUser();
+  const { user} = useAuth();
   const { pid } = router.query;
   const { getById, create, update, loadedInvoice } = useInvoice();
   const { getAll: getAllPartners, partners } = usePartner();
@@ -43,7 +43,7 @@ const Details: NextApplicationPage<React.FC> = () => {
 
   const formikInitialValues: Invoice = {
     id: getId(),
-    userId: loadedUser?.id,
+    userId: user?.id,
     partnerId: null,
     invoiceNumber: "",
     value: "",
@@ -94,7 +94,7 @@ const Details: NextApplicationPage<React.FC> = () => {
   const handleSubmit = (values: Invoice) => {
     const data = {
       ...values,
-      userId: loadedUser?.id,
+      userId: user?.id,
     };
     if (data.id && data.userId) {
       update(data);
