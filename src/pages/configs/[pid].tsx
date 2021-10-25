@@ -14,43 +14,41 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import Layout from "../../components/layout";
 import { NextApplicationPage } from "../../types/types";
-import { Category } from "../../util/models";
+import { Config } from "../../util/models";
 import * as Yup from "yup";
 import { useAuth } from "../../contexts/authContext";
-import { useCategory } from "../../contexts/categoryContext";
+import { useConfig } from "../../contexts/configContext";
 
 const Details: NextApplicationPage<React.FC> = () => {
   const router = useRouter();
   const { user } = useAuth();
   const { pid } = router.query;
-  const { getById, create, update, loadedCategory } = useCategory();
-  let formikRef: FormikProps<Category>;
+  const { getById, create, update, loadedConfig } = useConfig();
+  let formikRef: FormikProps<Config>;
 
   const getId = () =>
-    isNaN(parseInt(String(pid)))
+    isNaN(Number(pid))
       ? null
-      : parseInt(String(pid)) === 0
-      ? null
-      : parseInt(String(pid));
+      : Number(pid);
 
-  const formikInitialValues: Category = {
+  const formikInitialValues: Config = {
     id: getId(),
     userId: user.id,
     name: "",
-    description: "",
+    value: 0,
     active: true,
   };
 
   useEffect(() => {
     const id = getId();
-    if (id) {
+    if (id || id === 0) {
       getById(id);
     }
   }, []);
 
   useEffect(() => {
-    formikRef.setValues(loadedCategory);
-  }, [loadedCategory]);
+    formikRef.setValues(loadedConfig);
+  }, [loadedConfig]);
 
   const requiredMessage = "Obrigatório";
   const SignUpValidationSchema = Yup.object().shape({
@@ -63,7 +61,7 @@ const Details: NextApplicationPage<React.FC> = () => {
     router.back();
   };
 
-  const handleSubmit = (values: Category) => {
+  const handleSubmit = (values: Config) => {
     const data = {
       ...values,
       userId: user.id,
@@ -81,7 +79,9 @@ const Details: NextApplicationPage<React.FC> = () => {
       <Card sx={{ display: "flex" }}>
         <Container maxWidth="lg">
           <CardHeader
-            title={getId() ? "Editar categoria" : "Adicionar nova categoria"}
+            title={
+              getId() ? "Editar configuração" : "Adicionar nova configuração"
+            }
           />
           <Formik
             innerRef={(p) => (formikRef = p)}
@@ -105,32 +105,32 @@ const Details: NextApplicationPage<React.FC> = () => {
                       }
                     />
                   </Grid>
-                  <Grid item xs>
+                  <Grid item sm>
                     <Field
                       as={TextField}
                       fullWidth
-                      value={values.description}
-                      label="Descrição"
-                      name="description"
-                      error={errors.description && touched.description}
+                      value={String(values.value)}
+                      label="Valor"
+                      name="value"
+                      inputProps={{ inputMode: "numeric" }}
+                      error={errors.value && touched.value}
                       helperText={
-                        errors.description && touched.description
-                          ? errors.description
-                          : null
+                        errors.value && touched.value ? errors.value : null
                       }
                     />
                   </Grid>
                   <Grid item xs>
                     <Field
                       as={FormControlLabel}
-                      fullWidth
                       label="Ativo"
-                      control={<Switch name="active" value={values.active} checked={values.active}/>}
-                      inputProps={{ maxLength: 18, inputMode: "numeric" }}
-                      error={errors.active && touched.active}
-                      helperText={
-                        errors.active && touched.active ? errors.active : null
+                      control={
+                        <Switch
+                          name="active"
+                          value={values.active}
+                          checked={values.active}
+                        />
                       }
+                      inputProps={{ maxLength: 18, inputMode: "numeric" }}
                     />
                   </Grid>
                 </Grid>

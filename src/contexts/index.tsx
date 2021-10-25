@@ -1,5 +1,6 @@
 import React from "react";
 import { CategoryProvider } from "./categoryContext";
+import { ConfigProvider } from "./configContext";
 import { ExpenseProvider } from "./expenseContext";
 import { InvoiceProvider } from "./invoiceContext";
 import { PartnerProvider } from "./partnerContext";
@@ -8,13 +9,15 @@ import { PartnerProvider } from "./partnerContext";
 
 const RootProvider: React.FC = ({ children }) => {
   return (
-    <PartnerProvider>
-      <InvoiceProvider>
-        <CategoryProvider>
-          <ExpenseProvider>{children}</ExpenseProvider>
-        </CategoryProvider>
-      </InvoiceProvider>
-    </PartnerProvider>
+    <ConfigProvider>
+      <PartnerProvider>
+        <InvoiceProvider>
+          <CategoryProvider>
+            <ExpenseProvider>{children}</ExpenseProvider>
+          </CategoryProvider>
+        </InvoiceProvider>
+      </PartnerProvider>
+    </ConfigProvider>
   );
 };
 

@@ -20,7 +20,7 @@ const Dashboard: NextApplicationPage<React.FC> = () => {
           <Grid container spacing={2} >
             <Grid item flexGrow={1}>
               <CardHeader
-                title="DashBoard (Em desenvolvimento)"
+                title="DashBoard"
               />
             </Grid>
             <Grid item>

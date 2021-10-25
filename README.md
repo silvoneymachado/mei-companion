@@ -3,7 +3,7 @@
 ##Aplicação voltada para o acompanhamento de notas fiscais emitidas
 ### Teclonigias utilizadas
 - Next JS
-- Prisma ORM
+- Prisma ORM (Back-end da aplicação)
 - Heroku (Para hospedagem da database Postgres)
 
 ### O que é possível realizar com a aplicação
@@ -13,15 +13,16 @@
 - Cadastrar Notas emitidas
 - Cadastrar categorias de despesas
 - Cadastrar despesas
+- Cadastrar opções e limites
 
 ### O que não é possível ainda (Funcionalidades futuras)
-- Cadastrar opções e limites
 - Visualizar gráficos
+- Obter alertas de faturamento
 
 
-Para testat a aplicação siga o [link](https://mei-companion.vercel.app/)
+Para testar a aplicação siga o [link](https://mei-companion.vercel.app/)
 
-### Disclamer
+### Disclaimer
 
 Me empolguei com o desenvolvimento e a possibilidade de utilizar as tecnologias descritas 
 e fui desatento ao ponto de não ler toda a especificação do ponto "_Atividade seguindo as considerações
