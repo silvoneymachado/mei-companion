@@ -21,6 +21,7 @@ import * as Yup from "yup";
 import { formatCNPJ, formatPhoneNumber } from "../../util/masks";
 import { useUser } from "../../contexts/userContext";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
+import { useAuth } from "../../contexts/authContext";
 
 interface PropAdapter {
   willChangePass: boolean;
@@ -28,7 +29,8 @@ interface PropAdapter {
 
 const Details: NextApplicationPage<React.FC> = () => {
   const router = useRouter();
-  const { update, loadedUser, changeUserPass } = useUser();
+  const { update, loadedUser, changeUserPass, getById } = useUser();
+  const { user } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   let formikRef: FormikProps<User & PropAdapter>;
@@ -49,6 +51,12 @@ const Details: NextApplicationPage<React.FC> = () => {
       formikRef.setValues({ ...loadedUser, willChangePass: false });
     }
   }, [loadedUser]);
+
+  useEffect(() => {
+    if (user && user.id) {
+      getById(user.id);
+    }
+  }, [user]);
 
   const requiredMessage = "Obrigatório";
   const SignUpValidationSchema = Yup.object().shape({
