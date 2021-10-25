@@ -74,9 +74,25 @@ const Details: NextApplicationPage<React.FC> = () => {
   };
 
   const handleSubmit = (values: User & PropAdapter) => {
-    update(values);
+    update({
+      id: values.id,
+      name: values.name,
+      cnpj: values.cnpj,
+      corporateName: values.corporateName,
+      email: values.email,
+      phoneNumber: values.phoneNumber,
+      password: values.password,
+    });
     if (values.willChangePass) {
-      changeUserPass(values);
+      changeUserPass({
+        id: values.id,
+        name: values.name,
+        cnpj: values.cnpj,
+        corporateName: values.corporateName,
+        email: values.email,
+        phoneNumber: values.phoneNumber,
+        password: values.password,
+      });
     }
   };
 
