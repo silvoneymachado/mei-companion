@@ -66,6 +66,7 @@ const  AuthProvider: React.FC = ({ children }) => {
       router.replace('/dashboard');
     } catch (error) {
       showAlert({ text: `${error.response.data.statusText}`, severity: Severity.ERROR });
+      setLoading(false);
     }
     setLoading(false);
   }
