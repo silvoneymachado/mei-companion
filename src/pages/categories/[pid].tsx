@@ -49,7 +49,10 @@ const Details: NextApplicationPage<React.FC> = () => {
   }, []);
 
   useEffect(() => {
-    formikRef.setValues(loadedCategory);
+    const id = getId();
+    if (id) {
+      formikRef.setValues(loadedCategory);
+    }
   }, [loadedCategory]);
 
   const requiredMessage = "Obrigatório";

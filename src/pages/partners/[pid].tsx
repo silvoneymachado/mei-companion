@@ -48,7 +48,10 @@ const Details: NextApplicationPage<React.FC> = () => {
   }, []);
 
   useEffect(() => {
-    formikRef.setValues(loadedPartner);
+    const id = getId();
+    if (id) {
+      formikRef.setValues(loadedPartner);
+    }
   }, [loadedPartner]);
 
   const requiredMessage = "Obrigatório";
