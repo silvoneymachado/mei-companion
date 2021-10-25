@@ -47,7 +47,7 @@ const Details: NextApplicationPage<React.FC> = () => {
   const formikInitialValues: Expense = {
     userId: user.id,
     name: "",
-    partnerId: 0,
+    partnerId: undefined,
     value: "",
     notes: "",
     paymentDate: new Date(),

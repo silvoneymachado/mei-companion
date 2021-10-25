@@ -35,7 +35,7 @@ const ExpenseProvider: React.FC = ({ children }) => {
   const [loadedExpense, setLoadedExpense] = useState({
     userId: user.id,
     name: '',
-    partnerId: 0,
+    partnerId: undefined,
     value: '',
     notes: '',
     paymentDate: new Date(),
@@ -98,6 +98,7 @@ const ExpenseProvider: React.FC = ({ children }) => {
           text: "Excluido com sucesso",
           severity: Severity.SUCCESS,
         });
+        getAll();
       }
     } catch (error) {
       showAlert({

@@ -98,6 +98,7 @@ const InvoiceProvider: React.FC = ({ children }) => {
           text: "Excluido com sucesso",
           severity: Severity.SUCCESS,
         });
+        getAll();
       }
     } catch (error) {
       showAlert({
