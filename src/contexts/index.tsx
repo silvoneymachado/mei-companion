@@ -4,20 +4,23 @@ import { ConfigProvider } from "./configContext";
 import { ExpenseProvider } from "./expenseContext";
 import { InvoiceProvider } from "./invoiceContext";
 import { PartnerProvider } from "./partnerContext";
+import { UserProvider } from "./userContext";
 
 // import { Container } from './styles';
 
 const RootProvider: React.FC = ({ children }) => {
   return (
-    <ConfigProvider>
-      <PartnerProvider>
-        <InvoiceProvider>
-          <CategoryProvider>
-            <ExpenseProvider>{children}</ExpenseProvider>
-          </CategoryProvider>
-        </InvoiceProvider>
-      </PartnerProvider>
-    </ConfigProvider>
+    <UserProvider>
+      <ConfigProvider>
+        <PartnerProvider>
+          <InvoiceProvider>
+            <CategoryProvider>
+              <ExpenseProvider>{children}</ExpenseProvider>
+            </CategoryProvider>
+          </InvoiceProvider>
+        </PartnerProvider>
+      </ConfigProvider>
+    </UserProvider>
   );
 };
 

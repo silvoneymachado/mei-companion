@@ -16,12 +16,12 @@ import Layout from "../../components/layout";
 import { NextApplicationPage } from "../../types/types";
 import { Category } from "../../util/models";
 import * as Yup from "yup";
-import { useAuth } from "../../contexts/authContext";
 import { useCategory } from "../../contexts/categoryContext";
+import { useUser } from "../../contexts/userContext";
 
 const Details: NextApplicationPage<React.FC> = () => {
   const router = useRouter();
-  const { user } = useAuth();
+  const { loadedUser } = useUser();
   const { pid } = router.query;
   const { getById, create, update, loadedCategory } = useCategory();
   let formikRef: FormikProps<Category>;
@@ -35,7 +35,7 @@ const Details: NextApplicationPage<React.FC> = () => {
 
   const formikInitialValues: Category = {
     id: getId(),
-    userId: user.id,
+    userId: loadedUser.id,
     name: "",
     description: "",
     active: true,
@@ -69,7 +69,7 @@ const Details: NextApplicationPage<React.FC> = () => {
   const handleSubmit = (values: Category) => {
     const data = {
       ...values,
-      userId: user.id,
+      userId: loadedUser.id,
     };
 
     if (data.id && data.userId) {

@@ -5,7 +5,7 @@ export type User = {
     cnpj: string
     corporateName?: string
     phoneNumber: string
-    password: string
+    password?: string
   }
   
   /**

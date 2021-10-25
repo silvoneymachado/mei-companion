@@ -41,9 +41,7 @@ interface MenuItem {
 
 const AppDrawer: React.FC<DrawerProps> = (props: DrawerProps) => {
   const { isDrawerOpen, toggledrawer } = props;
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
-  const { signOut } = useAuth();
 
   const menuItems: MenuItem[] = [
     {
@@ -71,19 +69,10 @@ const AppDrawer: React.FC<DrawerProps> = (props: DrawerProps) => {
       icon: <Description />,
       route: "/expenses",
     },
-    {
-      label: "Configurações",
-      icon: <Settings />,
-      route: "/configs",
-    },
   ];
 
   const navigate = (item: MenuItem) => {
     router.push(item.route);
-  };
-
-  const confirmSignOut = () => {
-    signOut();
   };
 
   return (
@@ -111,23 +100,8 @@ const AppDrawer: React.FC<DrawerProps> = (props: DrawerProps) => {
             </ListItem>
           </Tooltip>
         ))}
-        <Tooltip title="Sair" placement="right" arrow>
-          <ListItem button onClick={() => setIsModalOpen(true)}>
-            <ListItemIcon>
-              <Logout />
-            </ListItemIcon>
-            <ListItemText primary={"Sair"} />
-          </ListItem>
-        </Tooltip>
       </List>
       <Divider />
-      <Dialog
-        contentText="Deseja sair da aplicação?"
-        title="Sair"
-        onConfirm={() => confirmSignOut()}
-        open={isModalOpen}
-        onCancel={() => setIsModalOpen(false)}
-      />
     </Drawer>
   );
 };

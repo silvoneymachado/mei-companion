@@ -20,15 +20,15 @@ import Layout from "../../components/layout";
 import { NextApplicationPage } from "../../types/types";
 import { Category, Expense } from "../../util/models";
 import * as Yup from "yup";
-import { useAuth } from "../../contexts/authContext";
 import { useExpense } from "../../contexts/expenseContext";
 import { usePartner } from "../../contexts/partnerContext";
 import { Partner } from ".prisma/client";
 import { useCategory } from "../../contexts/categoryContext";
+import { useUser } from "../../contexts/userContext";
 
 const Details: NextApplicationPage<React.FC> = () => {
   const router = useRouter();
-  const { user } = useAuth();
+  const { loadedUser } = useUser();
   const { pid } = router.query;
   const { getById, create, update, loadedExpense } = useExpense();
   const { getAll: getAllPartners, partners } = usePartner();
@@ -45,7 +45,7 @@ const Details: NextApplicationPage<React.FC> = () => {
       : parseInt(String(pid));
 
   const formikInitialValues: Expense = {
-    userId: user.id,
+    userId: loadedUser.id,
     name: "",
     partnerId: 0,
     value: "",
@@ -103,17 +103,17 @@ const Details: NextApplicationPage<React.FC> = () => {
 
   const handleSubmit = (values: Expense) => {
     const id = getId();
-    if (id && user.id) {
+    if (id && loadedUser.id) {
       const data = {
         ...values,
         id: id,
-        userId: user.id,
+        userId: loadedUser.id,
       };
       update(data);
     } else {
       const data = {
         ...values,
-        userId: user.id,
+        userId: loadedUser.id,
       };
       create(data);
     }

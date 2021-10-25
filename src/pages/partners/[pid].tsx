@@ -15,12 +15,12 @@ import { NextApplicationPage } from "../../types/types";
 import { Partner } from "../../util/models";
 import * as Yup from "yup";
 import { formatCNPJ } from "../../util/masks";
-import { useAuth } from "../../contexts/authContext";
 import { usePartner } from "../../contexts/partnerContext";
+import { useUser } from "../../contexts/userContext";
 
 const Details: NextApplicationPage<React.FC> = () => {
   const router = useRouter();
-  const { user } = useAuth();
+  const { loadedUser } = useUser();
   const { pid } = router.query;
   const { getById, create, update, loadedPartner } = usePartner();
   let formikRef: FormikProps<Partner>;
@@ -34,7 +34,7 @@ const Details: NextApplicationPage<React.FC> = () => {
 
   const formikInitialValues: Partner = {
     id: getId(),
-    userId: user.id,
+    userId: loadedUser.id,
     name: "",
     cnpj: "",
     corporateName: "",
@@ -55,7 +55,7 @@ const Details: NextApplicationPage<React.FC> = () => {
   }, [loadedPartner]);
 
   const requiredMessage = "Obrigatório";
-  const SignUpValidationSchema = Yup.object().shape({
+  const PartnerValidationSchema = Yup.object().shape({
     name: Yup.string()
       .min(2, "Digite um nome de pelo menos 2 dígitos")
       .required(requiredMessage),
@@ -74,7 +74,7 @@ const Details: NextApplicationPage<React.FC> = () => {
   const handleSubmit = (values: Partner) => {
     const data = {
       ...values,
-      userId: user.id,
+      userId: loadedUser.id,
     };
     if (data.id && data.userId) {
       update(data);
@@ -94,7 +94,7 @@ const Details: NextApplicationPage<React.FC> = () => {
             innerRef={(p) => (formikRef = p)}
             initialValues={formikInitialValues}
             onSubmit={(values) => handleSubmit(values)}
-            validationSchema={SignUpValidationSchema}
+            validationSchema={PartnerValidationSchema}
           >
             {({ values, errors, touched }) => (
               <Form>

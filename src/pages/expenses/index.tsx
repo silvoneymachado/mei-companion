@@ -88,7 +88,6 @@ const Expenses: NextApplicationPage<React.FC> = () => {
               </Grid>
             </Grid>
           </Grid>
-
           <List>
             {expenses?.map((expense, index) => (
               <CustomListItem
