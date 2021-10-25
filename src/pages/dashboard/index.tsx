@@ -8,20 +8,29 @@ import {
   Grid,
 } from "@mui/material";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "../../components/layout";
+import { useAuth } from "../../contexts/authContext";
+import { useUser } from "../../contexts/userContext";
 import { NextApplicationPage } from "../../types/types";
 
 const Dashboard: NextApplicationPage<React.FC> = () => {
+  const { user } = useAuth();
+  const { getById } = useUser();
+
+  useEffect(() => {
+    if (user && user.id) {
+      getById(user.id);
+    }
+  }, [user]);
+
   return (
     <Layout>
       <Card sx={{ display: "flex" }}>
         <Container maxWidth="lg">
-          <Grid container spacing={2} >
+          <Grid container spacing={2}>
             <Grid item flexGrow={1}>
-              <CardHeader
-                title="DashBoard"
-              />
+              <CardHeader title="DashBoard" />
             </Grid>
             <Grid item>
               <Grid container spacing={2} justifyContent="row">
