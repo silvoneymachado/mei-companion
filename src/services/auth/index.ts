@@ -1,3 +1,4 @@
+import { User } from "../../util/models";
 import { api } from "../api";
 
 type SignInRequestData = {
@@ -7,11 +8,7 @@ type SignInRequestData = {
 
 type SigninResponseData = {
   token: string;
-  user: {
-    id: number;
-    name: string;
-    email: string;
-  };
+  user: User;
 };
 
 export function signInRequest(

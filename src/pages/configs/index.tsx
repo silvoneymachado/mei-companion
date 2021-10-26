@@ -8,6 +8,8 @@ import { NextApplicationPage } from "../../types/types";
 import Dialog from "../../components/dialog";
 import { useRouter } from "next/router";
 import { useConfig } from "../../contexts/configContext";
+import { Config } from "../../util/models";
+import { encodeObj } from "../../util/masks";
 
 const Configs: NextApplicationPage<React.FC> = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,8 +32,8 @@ const Configs: NextApplicationPage<React.FC> = () => {
     setIsModalOpen(true);
   };
 
-  const handleEdit = (id: number) => {
-    router.push(`/configs/${id}`);
+  const handleEdit = (config: Config) => {
+    router.push({pathname: `/configs/${config.id}`, query: {data: encodeObj<Config>(config)}});
   };
 
   return (
@@ -62,7 +64,7 @@ const Configs: NextApplicationPage<React.FC> = () => {
                   currency: "BRL",
                 }).format(Number(config.value)) : ''}
                 onDelete={handleDelete}
-                onEdit={handleEdit}
+                onEdit={() => handleEdit(config)}
                 id={config.id}
                 hideDeleteAction
               />

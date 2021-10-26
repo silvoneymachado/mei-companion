@@ -13,15 +13,14 @@ import Layout from "../../components/layout";
 import { NextApplicationPage } from "../../types/types";
 
 const Dashboard: NextApplicationPage<React.FC> = () => {
+
   return (
     <Layout>
       <Card sx={{ display: "flex" }}>
         <Container maxWidth="lg">
-          <Grid container spacing={2} >
+          <Grid container spacing={2}>
             <Grid item flexGrow={1}>
-              <CardHeader
-                title="DashBoard"
-              />
+              <CardHeader title="DashBoard" />
             </Grid>
             <Grid item>
               <Grid container spacing={2} justifyContent="row">

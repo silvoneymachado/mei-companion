@@ -18,6 +18,8 @@ import { useRouter } from "next/router";
 import { useInvoice } from "../../contexts/invoiceContext";
 import { LocalizationProvider, DatePicker } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import { Invoice } from "../../util/models";
+import { encodeObj } from "../../util/masks";
 
 const Invoices: NextApplicationPage<React.FC> = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,8 +43,8 @@ const Invoices: NextApplicationPage<React.FC> = () => {
     setIsModalOpen(true);
   };
 
-  const handleEdit = (id: number) => {
-    router.push(`/invoices/${id}`);
+  const handleEdit = (invoice: Invoice) => {
+    router.push({pathname: `/invoices/${invoice.id}`, query: { data: encodeObj<Invoice>(invoice)}});
   };
 
   const handleChangeDate = (date: Date) => {
@@ -100,7 +102,7 @@ const Invoices: NextApplicationPage<React.FC> = () => {
                 }).format(parseFloat(invoice.value))}
                 description={String(invoice.invoiceNumber)}
                 onDelete={handleDelete}
-                onEdit={handleEdit}
+                onEdit={() => handleEdit(invoice)}
                 id={invoice.id}
               />
             ))}

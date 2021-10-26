@@ -6,12 +6,7 @@ import jwt from 'jsonwebtoken';
 import { signInRequest } from "../services/auth";
 import { api } from "../services/api";
 import { Severity, useAlert } from "./alertContext";
-
-type User = {
-  id: number;
-  name: string;
-  email: string;
-}
+import { User } from "../util/models";
 
 type SignInData = {
   email: string;

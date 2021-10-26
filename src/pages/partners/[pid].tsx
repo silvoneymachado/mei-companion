@@ -14,15 +14,16 @@ import Layout from "../../components/layout";
 import { NextApplicationPage } from "../../types/types";
 import { Partner } from "../../util/models";
 import * as Yup from "yup";
-import { formatCNPJ } from "../../util/masks";
-import { useAuth } from "../../contexts/authContext";
+import { decodeObj, formatCNPJ } from "../../util/masks";
 import { usePartner } from "../../contexts/partnerContext";
+import { useAuth } from "../../contexts/authContext";
+import { DataSaverOnOutlined } from "@mui/icons-material";
 
 const Details: NextApplicationPage<React.FC> = () => {
   const router = useRouter();
-  const { user } = useAuth();
-  const { pid } = router.query;
-  const { getById, create, update, loadedPartner } = usePartner();
+  const { user} = useAuth();
+  const { pid, data } = router.query;
+  const { create, update } = usePartner();
   let formikRef: FormikProps<Partner>;
 
   const getId = () =>
@@ -34,7 +35,7 @@ const Details: NextApplicationPage<React.FC> = () => {
 
   const formikInitialValues: Partner = {
     id: getId(),
-    userId: user.id,
+    userId: user?.id,
     name: "",
     cnpj: "",
     corporateName: "",
@@ -43,19 +44,12 @@ const Details: NextApplicationPage<React.FC> = () => {
   useEffect(() => {
     const id = getId();
     if (id) {
-      getById(id);
+      formikRef.setValues(decodeObj<Partner>(String(data)).item);
     }
-  }, []);
-
-  useEffect(() => {
-    const id = getId();
-    if (id) {
-      formikRef.setValues(loadedPartner);
-    }
-  }, [loadedPartner]);
+  }, [data]);
 
   const requiredMessage = "Obrigatório";
-  const SignUpValidationSchema = Yup.object().shape({
+  const PartnerValidationSchema = Yup.object().shape({
     name: Yup.string()
       .min(2, "Digite um nome de pelo menos 2 dígitos")
       .required(requiredMessage),
@@ -74,7 +68,7 @@ const Details: NextApplicationPage<React.FC> = () => {
   const handleSubmit = (values: Partner) => {
     const data = {
       ...values,
-      userId: user.id,
+      userId: user?.id,
     };
     if (data.id && data.userId) {
       update(data);
@@ -94,7 +88,7 @@ const Details: NextApplicationPage<React.FC> = () => {
             innerRef={(p) => (formikRef = p)}
             initialValues={formikInitialValues}
             onSubmit={(values) => handleSubmit(values)}
-            validationSchema={SignUpValidationSchema}
+            validationSchema={PartnerValidationSchema}
           >
             {({ values, errors, touched }) => (
               <Form>

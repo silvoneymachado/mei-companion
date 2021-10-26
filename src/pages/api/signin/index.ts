@@ -27,15 +27,14 @@ export default async function handle(
         res.json({
           token: jwt.sign(
             {
-              id: usrByEmail.id,
-              name: usrByEmail.name,
-              email: usrByEmail.email,
+              ...usrByEmail,
+              password: '',
             },
             process.env.JWT_KEY
           ),
           user: {
-            name: usrByEmail.name,
-            email: usrByEmail.email,
+            ...usrByEmail,
+            password: '',
           },
         });
       } else {
