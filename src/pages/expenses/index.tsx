@@ -18,6 +18,8 @@ import { useRouter } from "next/router";
 import { useExpense } from "../../contexts/expenseContext";
 import { DatePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import { Expense } from "../../util/models";
+import { encodeObj } from "../../util/masks";
 
 const Expenses: NextApplicationPage<React.FC> = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,8 +43,8 @@ const Expenses: NextApplicationPage<React.FC> = () => {
     setIsModalOpen(true);
   };
 
-  const handleEdit = (id: number) => {
-    router.push(`/expenses/${id}`);
+  const handleEdit = (expense: Expense) => {
+    router.push({pathname: `/expenses/${expense.id}`, query: { data: encodeObj<Expense>(expense)}});
   };
 
   const handleChangeDate = (date: Date) => {
@@ -101,7 +103,7 @@ const Expenses: NextApplicationPage<React.FC> = () => {
                   new Date(expense.paymentDate)
                 )}
                 onDelete={handleDelete}
-                onEdit={handleEdit}
+                onEdit={() => handleEdit(expense)}
                 id={expense.id}
               />
             ))}

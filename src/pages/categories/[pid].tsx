@@ -18,12 +18,14 @@ import { Category } from "../../util/models";
 import * as Yup from "yup";
 import { useCategory } from "../../contexts/categoryContext";
 import { useAuth } from "../../contexts/authContext";
+import { decodeObj } from "../../util/masks";
 
 const Details: NextApplicationPage<React.FC> = () => {
   const router = useRouter();
   const { user} = useAuth();
-  const { pid } = router.query;
-  const { getById, create, update, loadedCategory } = useCategory();
+  const { pid, data } = router.query;
+
+  const { create, update } = useCategory();
   let formikRef: FormikProps<Category>;
 
   const getId = () =>
@@ -44,16 +46,9 @@ const Details: NextApplicationPage<React.FC> = () => {
   useEffect(() => {
     const id = getId();
     if (id) {
-      getById(id);
+      formikRef.setValues(decodeObj<Category>(String(data)).item);
     }
-  }, []);
-
-  useEffect(() => {
-    const id = getId();
-    if (id) {
-      formikRef.setValues(loadedCategory);
-    }
-  }, [loadedCategory]);
+  }, [data]);
 
   const requiredMessage = "Obrigatório";
   const SignUpValidationSchema = Yup.object().shape({

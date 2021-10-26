@@ -20,6 +20,8 @@ import { useRouter } from "next/router";
 import { Settings, Logout } from "@mui/icons-material";
 import Link from "next/link";
 import Dialog from "./dialog";
+import { encodeObj } from "../util/masks";
+import { User } from "../util/models";
 
 const drawerWidth = 0;
 
@@ -113,7 +115,7 @@ const ButtonAppBar = (props: AppBarProps) => {
           </Typography>
         </MenuItem>
         <Divider />
-        <Link href={"/profile"}>
+        <Link href={{pathname: "/profile", query: { data: encodeObj<User>(user)}}}>
           <MenuItem>
             <Avatar /> Perfil
           </MenuItem>

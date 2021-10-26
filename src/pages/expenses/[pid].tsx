@@ -25,16 +25,18 @@ import { usePartner } from "../../contexts/partnerContext";
 import { Partner } from ".prisma/client";
 import { useCategory } from "../../contexts/categoryContext";
 import { useAuth } from "../../contexts/authContext";
+import { decodeObj } from "../../util/masks";
 
 const Details: NextApplicationPage<React.FC> = () => {
   const router = useRouter();
   const { user} = useAuth();
-  const { pid } = router.query;
-  const { getById, create, update, loadedExpense } = useExpense();
+  const { pid, data } = router.query;
+  const { create, update } = useExpense();
   const { getAll: getAllPartners, partners } = usePartner();
   const { getAll: getAllCategories, categories } = useCategory();
   const [selectedPartner, setSelectedPartner] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [ loadedExpense, setLoadedExpense ] = useState(null);
   let formikRef: FormikProps<Expense>;
 
   const getId = () =>
@@ -56,24 +58,22 @@ const Details: NextApplicationPage<React.FC> = () => {
   };
 
   useEffect(() => {
-    const id = getId();
     getAllPartners();
     getAllCategories();
-    if (id) {
-      getById(id);
-    }
   }, []);
 
   useEffect(() => {
+    const expense = decodeObj<Expense>(String(data))?.item;
+    setLoadedExpense(expense);
     if (getId()) {
-      formikRef.setValues(loadedExpense);
+      formikRef.setValues(expense);
     }
-  }, [loadedExpense]);
+  }, [data]);
 
   useEffect(() => {
     if (partners && partners?.length > 0) {
       setSelectedPartner(
-        partners?.find((partner) => partner.id === loadedExpense.partnerId)
+        partners?.find((partner) => partner.id === loadedExpense?.partnerId)
       );
     }
   }, [partners]);
@@ -81,7 +81,7 @@ const Details: NextApplicationPage<React.FC> = () => {
   useEffect(() => {
     if (categories && categories?.length > 0) {
       setSelectedCategory(
-        categories?.find((category) => category.id === loadedExpense.categoryId)
+        categories?.find((category) => category.id === loadedExpense?.categoryId)
       );
     }
   }, [categories]);

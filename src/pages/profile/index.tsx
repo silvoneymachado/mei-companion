@@ -18,7 +18,7 @@ import Layout from "../../components/layout";
 import { NextApplicationPage } from "../../types/types";
 import { User } from "../../util/models";
 import * as Yup from "yup";
-import { formatCNPJ, formatPhoneNumber } from "../../util/masks";
+import { decodeObj, formatCNPJ, formatPhoneNumber } from "../../util/masks";
 import { useUser } from "../../contexts/userContext";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
 
@@ -28,7 +28,8 @@ interface PropAdapter {
 
 const Details: NextApplicationPage<React.FC> = () => {
   const router = useRouter();
-  const { update, loadedUser, changeUserPass } = useUser();
+  const { data } = router.query;
+  const { update, changeUserPass } = useUser();
   const [showPassword, setShowPassword] = useState(false);
 
   let formikRef: FormikProps<User & PropAdapter>;
@@ -45,10 +46,11 @@ const Details: NextApplicationPage<React.FC> = () => {
   };
 
   useEffect(() => {
-    if (loadedUser && loadedUser?.id) {
-      formikRef.setValues({ ...loadedUser, willChangePass: false });
+    const user = decodeObj<User>(String(data))?.item;
+    if (user) {
+      formikRef.setValues({ ...user, willChangePass: false });
     }
-  }, [loadedUser]);
+  }, [data]);
 
   const requiredMessage = "Obrigatório";
   const SignUpValidationSchema = Yup.object().shape({
@@ -64,7 +66,7 @@ const Details: NextApplicationPage<React.FC> = () => {
       "O telefone não pode ultrapassar 11 digitos"
     ),
     password: Yup.string().when("willChangePass", {
-      is: (value) => value === true,
+      is: (value: boolean) => value === true,
       then: Yup.string().required(requiredMessage),
     }),
   });

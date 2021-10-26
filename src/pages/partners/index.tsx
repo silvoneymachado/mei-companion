@@ -8,6 +8,8 @@ import { NextApplicationPage } from "../../types/types";
 import Dialog from "../../components/dialog";
 import { useRouter } from "next/router";
 import { usePartner } from "../../contexts/partnerContext";
+import { Partner } from "../../util/models";
+import { encodeObj } from "../../util/masks";
 
 const Partners: NextApplicationPage<React.FC> = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,8 +32,8 @@ const Partners: NextApplicationPage<React.FC> = () => {
     setIsModalOpen(true);
   };
 
-  const handleEdit = (id: number) => {
-    router.push(`/partners/${id}`);
+  const handleEdit = (partner: Partner) => {
+    router.push({pathname: `/partners/${partner.id}`, query: {data: encodeObj<Partner>(partner)}});
   };
 
   return (
@@ -59,7 +61,7 @@ const Partners: NextApplicationPage<React.FC> = () => {
                 secondaryText={partner.name}
                 description={partner.cnpj}
                 onDelete={handleDelete}
-                onEdit={handleEdit}
+                onEdit={() => handleEdit(partner)}
                 id={partner.id}
               />
             ))}

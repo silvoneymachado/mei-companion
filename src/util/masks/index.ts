@@ -1,3 +1,5 @@
+import jwt from "jsonwebtoken";
+
 export function formatCPF(cpfNumberString: string) {
   const cleaned = ("" + cpfNumberString).replace(/\D/g, "");
   const match = cleaned.match(/^(\d{3})(\d{3})(\d{3})(\d{2})$/);
@@ -21,4 +23,16 @@ export function formatPhoneNumber(cnpjNumberString: string) {
   if (match) {
     return `(${match[1]})${match[2]}-${match[3]}`;
   }
+}
+
+export function encodeObj<T>(obj: T){
+  return jwt.sign({item: obj}, 'serializedObj');
+}
+
+interface Decoded<T>{
+  item: T
+}
+
+export function decodeObj<T>(encoded: string): Decoded<T>{
+  return jwt.decode(encoded) as Decoded<T>;
 }

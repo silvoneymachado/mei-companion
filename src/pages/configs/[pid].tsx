@@ -18,12 +18,13 @@ import { Config } from "../../util/models";
 import * as Yup from "yup";
 import { useConfig } from "../../contexts/configContext";
 import { useAuth } from "../../contexts/authContext";
+import { decodeObj } from "../../util/masks";
 
 const Details: NextApplicationPage<React.FC> = () => {
   const router = useRouter();
   const { user} = useAuth();
-  const { pid } = router.query;
-  const { getById, create, update, loadedConfig } = useConfig();
+  const { pid, data } = router.query;
+  const { create, update } = useConfig();
   let formikRef: FormikProps<Config>;
 
   const getId = () =>
@@ -39,19 +40,13 @@ const Details: NextApplicationPage<React.FC> = () => {
     active: true,
   };
 
-  useEffect(() => {
-    const id = getId();
-    if (id || id === 0) {
-      getById(id);
-    }
-  }, []);
 
   useEffect(() => {
     const id = getId();
     if (id || id === 0) {
-      formikRef.setValues(loadedConfig);
+      formikRef.setValues(decodeObj<Config>(String(data)).item);
     }
-  }, [loadedConfig]);
+  }, [data]);
 
   const requiredMessage = "Obrigatório";
   const SignUpValidationSchema = Yup.object().shape({

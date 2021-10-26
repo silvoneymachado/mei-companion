@@ -8,6 +8,8 @@ import { NextApplicationPage } from "../../types/types";
 import Dialog from "../../components/dialog";
 import { useRouter } from "next/router";
 import { useCategory } from "../../contexts/categoryContext";
+import { Category } from "../../util/models";
+import { encodeObj } from "../../util/masks";
 
 const Categories: NextApplicationPage<React.FC> = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,8 +32,8 @@ const Categories: NextApplicationPage<React.FC> = () => {
     setIsModalOpen(true);
   };
 
-  const handleEdit = (id: number) => {
-    router.push(`/categories/${id}`);
+  const handleEdit = (category: Category) => {
+    router.push({pathname: `/categories/${category.id}`, query: {data: encodeObj<Category>(category)}});
   };
 
   return (
@@ -59,7 +61,7 @@ const Categories: NextApplicationPage<React.FC> = () => {
                 secondaryText={category.description}
                 description={category.active ? "Ativo" : "Inativo"}
                 onDelete={handleDelete}
-                onEdit={handleEdit}
+                onEdit={() => handleEdit(category)}
                 id={category.id}
               />
             ))}
