@@ -1,11 +1,13 @@
 import prisma from "../../../lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
-import { Invoice } from "../../../util/models";
+import { Invoice, User } from "../../../util/models";
+import jwt from 'jsonwebtoken';
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const authorization = req.headers.authorization;
+  const token = jwt.decode(authorization) as User;
 
   if (authorization) {
     const methods = {
@@ -48,7 +50,9 @@ export default async function handler(
 
   async function getAll() {
     try {
-      const result = await prisma.invoice.findMany();
+      const result = await prisma.invoice.findMany({
+        where: {userId: token.id}
+      });
       res.json(result);
     } catch (error) {
       res.status(500).json({
